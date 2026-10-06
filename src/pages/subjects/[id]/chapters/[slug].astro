@@ -1,0 +1,16 @@
+---
+import ChapterLayout from '../../../../layouts/ChapterLayout.astro';
+import KnowledgeCheck from '../../../../components/assessment/KnowledgeCheck.astro';
+import ChapterProgress from '../../../../components/assessment/ChapterProgress.astro';
+import { catalog } from '../../../../learning/catalog';
+import { questionBanks } from '../../../../assessment/catalog';
+export function getStaticPaths() {
+  return catalog.chapters.filter(chapter => chapter.publication === 'published').map(chapter => ({ params: { id: chapter.subjectId, slug: chapter.slug }, props: { chapter } }));
+}
+const { chapter } = Astro.props;
+const bank = questionBanks.find(bank => bank.chapterId === chapter.id);
+---
+<ChapterLayout chapter={chapter} catalog={catalog}>
+  {bank && <KnowledgeCheck slot="knowledge-check-before" mode="before" chapter={chapter} bank={bank} catalog={catalog} />}
+  {bank && <Fragment slot="knowledge-check-after"><KnowledgeCheck mode="after" chapter={chapter} bank={bank} catalog={catalog} /><ChapterProgress chapterId={chapter.id} /></Fragment>}
+</ChapterLayout>
