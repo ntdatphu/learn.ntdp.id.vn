@@ -1,0 +1,57 @@
+---
+import type { Catalog, CliExample } from '../../learning/model';
+import { requireRecord } from '../../learning/resolve';
+interface Props { example: CliExample; catalog: Catalog }
+const { example, catalog } = Astro.props;
+---
+<figure class="learning-cli" id={example.id} data-cli-example>
+  <figcaption id={`${example.id}-caption`}>{example.caption}</figcaption>
+  <div class="cli-scroll" tabindex="0" role="region" aria-labelledby={`${example.id}-caption`}>
+    {example.lines.map(line => line.kind === 'command' ? (() => {
+      const command = requireRecord(catalog.commands, line.commandId);
+      return <div class:list={['cli-line', 'cli-line--command', { 'cli-line--highlight': command.highlight }]}>
+        <code><span class="cli-prompt">{command.prompt ? `${command.prompt} ` : ''}</span><span class="cli-command">{command.text}</span></code>
+        {command.copyable && <button class="cli-copy" type="button" data-cli-copy data-command={command.text} aria-label={`Copy command: ${command.text}`} hidden disabled>Copy</button>}
+      </div>;
+    })() : <div class:list={['cli-line', `cli-line--${line.kind}`, { 'cli-line--verified': line.kind === 'output' && line.verified }]}>
+      {line.kind === 'output' ? <samp>{line.text}</samp> : <code>{line.text}</code>}
+      {line.kind === 'output' && line.verified && <span class="cli-verified-label">Verified</span>}
+    </div>)}
+  </div>
+  <p class="cli-status" role="status"></p>
+</figure>
+<script>
+  // Pointer capabilities and available width, never user-agent sniffing.
+  const desktop = window.matchMedia('(min-width: 48rem) and (hover: hover) and (pointer: fine)');
+  const clipboardAvailable = window.isSecureContext && typeof navigator.clipboard?.writeText === 'function';
+  document.querySelectorAll<HTMLElement>('[data-cli-example]').forEach(example => {
+    const status = example.querySelector<HTMLElement>('[role="status"]');
+    const buttons = example.querySelectorAll<HTMLButtonElement>('[data-cli-copy]');
+    const updateControls = () => buttons.forEach(button => {
+      button.hidden = !clipboardAvailable || !desktop.matches;
+      button.disabled = button.hidden;
+    });
+    updateControls();
+    desktop.addEventListener('change', updateControls);
+    let reset: ReturnType<typeof setTimeout>;
+    let operation = 0;
+    buttons.forEach(button => button.addEventListener('click', async () => {
+      if (button.disabled || !desktop.matches || button.dataset.busy) return;
+      button.dataset.busy = 'true';
+      clearTimeout(reset);
+      const current = ++operation;
+      buttons.forEach(control => { control.textContent = 'Copy'; });
+      try {
+        await navigator.clipboard.writeText(button.dataset.command ?? '');
+        if (current !== operation) return;
+        button.textContent = 'Copied';
+        if (status) status.textContent = 'Command copied.';
+        reset = setTimeout(() => { button.textContent = 'Copy'; if (status) status.textContent = ''; }, 2000);
+      } catch {
+        if (current !== operation) return;
+        if (status) status.textContent = 'Could not copy. Select the command text to copy it manually.';
+        button.textContent = 'Copy';
+      } finally { delete button.dataset.busy; }
+    }));
+  });
+</script>

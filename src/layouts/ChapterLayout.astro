@@ -1,0 +1,46 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import LearningObjectives from '../components/learning/LearningObjectives.astro';
+import ContentBlocks from '../components/learning/ContentBlocks.astro';
+import KeyTopicsReview from '../components/learning/KeyTopicsReview.astro';
+import Prose from '../components/learning/Prose.astro';
+import type { Catalog, Chapter } from '../learning/model';
+import { chapterHref, chapterNavigation, keyTopicsFor, requireRecord } from '../learning/resolve';
+import { validateCatalog } from '../learning/validate';
+import { subjects } from '../data/subjects';
+import '../styles/learning.css';
+interface Props { chapter: Chapter; catalog: Catalog }
+const { chapter, catalog } = Astro.props;
+validateCatalog(catalog);
+const part = requireRecord(catalog.parts, chapter.partId);
+const subject = subjects.find(item => item.id === chapter.subjectId)!;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const navigation = chapterNavigation(chapter, catalog);
+const topics = keyTopicsFor(chapter, catalog);
+---
+<BaseLayout title={`${chapter.title} | ${subject.name} | Learning Hub`}>
+  <main id="main-content" class="learning-content" tabindex="-1" data-chapter-id={chapter.id}>
+    <article class="page-width chapter-reading">
+      <slot name="notice" />
+      <header class="chapter-header reading-measure">
+        <a class="back-link" href={`${base}/subjects/${chapter.subjectId}/`}>← Back to {subject.name}</a>
+        <p class="eyebrow">{part.title}</p><h1>{chapter.title}</h1>
+        {chapter.intro && <p class="chapter-intro">{chapter.intro}</p>}
+      </header>
+      <LearningObjectives objectives={chapter.objectives} />
+      <!-- TASK-009 supplies author-approved assessment components in these slots. -->
+      <slot name="knowledge-check-before" />
+      {chapter.sections.map(section => <section class="chapter-section" aria-labelledby={section.id}>
+        <h2 class="reading-measure" id={section.id}>{section.title}</h2>
+        <ContentBlocks blocks={section.blocks} catalog={catalog} />
+      </section>)}
+      <KeyTopicsReview topics={topics} />
+      <section class="chapter-summary reading-measure" aria-labelledby="chapter-summary"><h2 id="chapter-summary">Chapter Summary</h2><Prose content={chapter.summary} /></section>
+      <slot name="knowledge-check-after" />
+      {(navigation.previous || navigation.next) && <nav class="chapter-navigation reading-measure" aria-label="Chapter navigation">
+        {navigation.previous && <a rel="prev" href={chapterHref(navigation.previous, import.meta.env.BASE_URL)}><span>Previous chapter</span>{navigation.previous.title}</a>}
+        {navigation.next && <a rel="next" href={chapterHref(navigation.next, import.meta.env.BASE_URL)}><span>Next chapter</span>{navigation.next.title}</a>}
+      </nav>}
+    </article>
+  </main>
+</BaseLayout>

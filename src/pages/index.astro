@@ -51,7 +51,7 @@ import { subjects } from '../data/subjects.js';
     const normalize = (value: string) =>
       value.trim().replace(/\s+/g, ' ').toLowerCase();
 
-    function updateSubjects() {
+    const updateSubjects = () => {
       const query = normalize(searchInput.value);
       let matches = 0;
 
@@ -66,7 +66,7 @@ import { subjects } from '../data/subjects.js';
       if (searchStatus.textContent !== message) {
         searchStatus.textContent = message;
       }
-    }
+    };
 
     searchInput.addEventListener('input', updateSubjects);
     searchInput.addEventListener('search', updateSubjects);

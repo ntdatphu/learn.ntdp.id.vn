@@ -1,0 +1,10 @@
+---
+import Prose from './Prose.astro';
+import type { Prose as ProseContent } from '../../learning/model';
+interface Props { content: ProseContent; label?: string }
+const { content, label = 'Note' } = Astro.props;
+---
+<aside class="learning-note">
+  <p class="learning-label">{label}</p>
+  <Prose content={content} />
+</aside>

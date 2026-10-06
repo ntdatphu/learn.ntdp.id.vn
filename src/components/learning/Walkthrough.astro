@@ -1,0 +1,12 @@
+---
+import type { Catalog, Walkthrough } from '../../learning/model';
+import ReadingBlocks from './ReadingBlocks.astro';
+interface Props { exercise: Walkthrough; catalog: Catalog }
+const { exercise, catalog } = Astro.props;
+---
+<section class="learning-exercise" aria-labelledby={exercise.id}>
+  <p class="learning-label">Simplified Walkthrough</p>
+  <h3 id={exercise.id}>{exercise.title}</h3>
+  {exercise.intro && <p>{exercise.intro}</p>}
+  <ol class="learning-steps">{exercise.steps.map(step => <li><h4 id={`${exercise.id}-${step.id}`}>{step.title}</h4><ReadingBlocks blocks={step.content} catalog={catalog} /></li>)}</ol>
+</section>

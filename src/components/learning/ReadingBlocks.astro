@@ -1,0 +1,13 @@
+---
+import type { Catalog, ReadingBlock } from '../../learning/model';
+import Prose from './Prose.astro';
+import Note from './Note.astro';
+import ResponsiveTable from './ResponsiveTable.astro';
+import Diagram from './Diagram.astro';
+import CliExample from './CliExample.astro';
+interface Props { blocks: readonly ReadingBlock[]; catalog: Catalog }
+const { blocks, catalog } = Astro.props;
+---
+{blocks.map(block => <div class:list={['learning-block', { 'reading-measure': block.kind === 'prose' || block.kind === 'note' }]}>
+  {block.kind === 'prose' ? <Prose content={block} /> : block.kind === 'note' ? <Note content={block} label={block.label} /> : block.kind === 'table' ? <ResponsiveTable table={block} /> : block.kind === 'diagram' ? <Diagram diagram={block} /> : <CliExample example={block} catalog={catalog} />}
+</div>)}
