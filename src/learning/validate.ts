@@ -9,7 +9,7 @@ function unique(records: readonly { id: string }[], context: string) {
   const seen = new Set<string>();
   for (const record of records) { id(record.id); expect(!seen.has(record.id), `Duplicate ${context} ID: ${record.id}`); seen.add(record.id); }
 }
-function validateReading(block: ReadingBlock, catalog: Catalog) {
+export function validateReadingBlock(block: ReadingBlock, catalog: Catalog) {
   if (block.kind === 'cli') {
     text(block.caption, 'CLI caption');
     expect(block.lines.length > 0, 'CLI example needs lines');
@@ -42,7 +42,7 @@ export function validateCatalog(catalog: Catalog) {
   for (const [name, records] of Object.entries(catalog)) unique(records, name);
   for (const part of catalog.parts) { expect(['ccna', 'linux-system'].includes(part.subjectId), 'Unknown subject'); text(part.title, 'Part title'); }
   for (const command of catalog.commands) text(command.text, 'command text');
-  for (const topic of catalog.keyTopics) { text(topic.title, 'Key Topic title'); text(topic.summary, 'Key Topic review summary'); validateReading({ kind: 'prose', paragraphs: topic.paragraphs, items: topic.items }, catalog); }
+  for (const topic of catalog.keyTopics) { text(topic.title, 'Key Topic title'); text(topic.summary, 'Key Topic review summary'); validateReadingBlock({ kind: 'prose', paragraphs: topic.paragraphs, items: topic.items }, catalog); }
   for (const checklist of catalog.checklists) {
     text(checklist.title, 'checklist title'); text(checklist.category, 'checklist category'); unique(checklist.steps, 'checklist step'); expect(checklist.steps.length > 0, 'Checklist needs steps');
     for (const step of checklist.steps) { text(step.instruction, 'checklist instruction'); step.commandIds?.forEach(command => requireRecord(catalog.commands, command)); }
@@ -68,7 +68,7 @@ export function validateCatalog(catalog: Catalog) {
       else if (block.kind === 'checklist') {
         const checklist = requireRecord(catalog.checklists, block.checklistId); anchor(checklist.id);
         checklist.steps.forEach(step => { anchor(`${checklist.id}-${step.id}`); if (step.commandIds?.length) { anchor(`${checklist.id}-${step.id}-commands`); anchor(`${checklist.id}-${step.id}-commands-caption`); } });
-      } else if (block.kind === 'prose' || block.kind === 'note' || block.kind === 'cli' || block.kind === 'table' || block.kind === 'diagram') validateReading(block, catalog);
+      } else if (block.kind === 'prose' || block.kind === 'note' || block.kind === 'cli' || block.kind === 'table' || block.kind === 'diagram') validateReadingBlock(block, catalog);
       else {
         text(block.title, 'exercise title');
         if ('steps' in block) { unique(block.steps, 'exercise step'); expect(block.steps.length > 0, 'Exercise needs steps'); block.steps.forEach(step => { anchor(`${block.id}-${step.id}`); text(step.title, 'step title'); if ('why' in step) { text(step.why, 'step rationale'); text(step.expectedResult, 'expected result'); expect(step.action.length && step.verify.length, 'Guided steps need action and verification'); } }); }
@@ -80,6 +80,6 @@ export function validateCatalog(catalog: Catalog) {
     for (const relation of [chapter.previousId, chapter.nextId]) if (relation) {
       const neighbor = requireRecord(catalog.chapters, relation); expect(neighbor.id !== chapter.id && neighbor.subjectId === chapter.subjectId, 'Invalid Chapter navigation relationship');
     }
-    validateReading({ kind: 'prose', ...chapter.summary }, catalog);
+    validateReadingBlock({ kind: 'prose', ...chapter.summary }, catalog);
   }
 }

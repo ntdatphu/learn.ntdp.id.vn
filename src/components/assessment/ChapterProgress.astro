@@ -1,0 +1,24 @@
+---
+interface Props { chapterId: string }
+const { chapterId } = Astro.props;
+---
+<section class="chapter-progress reading-measure" data-chapter-progress={chapterId} aria-labelledby={`progress-${chapterId}`}>
+  <h2 id={`progress-${chapterId}`}>Your learning progress</h2>
+  <p class="progress-privacy">Progress is stored only in this browser/device. Nothing is sent to NTDP or third parties.</p>
+  <div data-progress-enhanced hidden>
+    <dl class="progress-scores" data-progress-scores></dl>
+    <p class="progress-improvement" data-progress-improvement></p>
+    <p data-progress-first></p>
+    <details class="learning-disclosure" data-progress-reset>
+      <summary>Reset local progress</summary>
+      <div><p>Delete this chapter’s saved Before/After results and study history in this browser? Other chapters and unrelated browser data are kept.</p>
+        <div class="progress-reset-actions"><button type="button" class="learning-button learning-button--secondary" data-progress-confirm>Delete this chapter’s progress</button><button type="button" class="learning-button learning-button--secondary" data-progress-cancel>Cancel</button></div>
+      </div>
+    </details>
+  </div>
+  <p class="check-storage-notice" role="status" data-progress-notice></p>
+</section>
+<script>
+  import { initializeLearningChecks } from '../../assessment/client';
+  initializeLearningChecks();
+</script>

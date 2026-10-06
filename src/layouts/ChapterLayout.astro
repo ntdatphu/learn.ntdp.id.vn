@@ -27,9 +27,8 @@ const topics = keyTopicsFor(chapter, catalog);
         <p class="eyebrow">{part.title}</p><h1>{chapter.title}</h1>
         {chapter.intro && <p class="chapter-intro">{chapter.intro}</p>}
       </header>
-      <LearningObjectives objectives={chapter.objectives} />
-      <!-- TASK-009 supplies author-approved assessment components in these slots. -->
       <slot name="knowledge-check-before" />
+      <LearningObjectives objectives={chapter.objectives} />
       {chapter.sections.map(section => <section class="chapter-section" aria-labelledby={section.id}>
         <h2 class="reading-measure" id={section.id}>{section.title}</h2>
         <ContentBlocks blocks={section.blocks} catalog={catalog} />

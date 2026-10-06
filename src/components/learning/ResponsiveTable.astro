@@ -1,12 +1,12 @@
 ---
 import type { TableBlock } from '../../learning/model';
-interface Props { table: TableBlock }
-const { table } = Astro.props;
+interface Props { table: TableBlock; contextLabelledBy?: string }
+const { table, contextLabelledBy } = Astro.props;
 ---
 <figure id={table.id} class:list={['learning-table', `learning-table--${table.mode}`]} data-table-mode={table.mode}>
   <figcaption id={`${table.id}-caption`}>{table.caption}</figcaption>
   {table.mode === 'scroll' && <p class="table-scroll-hint" id={`${table.id}-hint`}>Scroll horizontally to compare columns.</p>}
-  <div class="table-scroll" tabindex={table.mode === 'scroll' ? 0 : undefined} role={table.mode === 'scroll' ? 'region' : undefined} aria-labelledby={table.mode === 'scroll' ? `${table.id}-caption` : undefined} aria-describedby={table.mode === 'scroll' ? `${table.id}-hint` : undefined}>
+  <div class="table-scroll" tabindex={table.mode === 'scroll' ? 0 : undefined} role={table.mode === 'scroll' ? 'region' : undefined} aria-labelledby={table.mode === 'scroll' ? [contextLabelledBy, `${table.id}-caption`].filter(Boolean).join(' ') : undefined} aria-describedby={table.mode === 'scroll' ? `${table.id}-hint` : undefined}>
     <table>
       <caption class="learning-sr-only">{table.caption}</caption>
       <thead><tr>{table.columns.map(column => <th scope="col">{column.label}</th>)}</tr></thead>

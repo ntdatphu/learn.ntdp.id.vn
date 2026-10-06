@@ -55,3 +55,13 @@ separate from technical QA; a passing build does not establish originality or ri
 CCNA production is Part/Chapter at a time. TASK-008 creates no production Parts,
 Chapters, objectives, commands, checklists, or materials. Synthetic infrastructure
 fixtures belong only to the excluded QA harness and must not become public lessons.
+
+## Assessment authoring
+
+Identify the learning objective/concept assessed by a source question privately,
+then discard its wording, choices, sequence, and distinctive scenario before
+independently writing a Learning Hub question. Do not lightly paraphrase or translate
+questions/options. Each public question needs a defensible answer model, objective
+alignment, technically valid distractors, an independently authored explanation,
+and an accurate review anchor. TASK-009 supplies only infrastructure and excluded
+synthetic fixtures; no commercial source is read for it.

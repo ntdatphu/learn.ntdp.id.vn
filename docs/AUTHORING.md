@@ -141,3 +141,61 @@ two empty-state Subject routes and rejects fixture strings, extra content routes
 PDFs, external runtime URLs, or downloaded fonts. A later approved publication task
 must deliberately update that allowlist to the exact new real routes and retain the
 fixture/source exclusion checks. Never disable the guard merely to pass a build.
+
+## Assessments and browser-local progress (TASK-009)
+
+Define an independently authored `QuestionBank` with a positive `version`, Chapter
+ID, Before/After counts, and questions. Each question has a stable ID, Chapter and
+objective references, eligible modes, type, prompt, labeled choices, exact correct
+choice IDs, authored explanation, optional distractor explanations, review anchor,
+and optional reading-block context. `validateQuestionBank` checks references,
+answers, context, and coverage. Bump the bank version when content/answer/objective
+mappings change so stale saved results are reset only for that Chapter.
+
+Supported types are single-choice, multiple-choice, true-false, classification,
+CLI interpretation, configuration selection, troubleshooting, and topology/concept
+reasoning. All use native radio controls except multiple-choice, which uses
+checkboxes. Classification assigns one item/scenario to a category; there is no
+matching, drag/drop, or graphical interaction. True/false uses choice IDs `true`
+and `false`. Non-multiple types have exactly one correct choice. Multiple-choice
+requires the exact correct set: no partial or negative credit.
+
+Each Chapter objective needs eligible questions in both modes. Counts must be at
+least the objective count; target about 8–12 Before and 10–15 After when the bank
+supports that. Selection shuffles within objective pools and rotates across them,
+redistributing exhausted pools. Within each pool Post avoids the latest Pre IDs
+first, then favors unused/least-recently-used IDs. Reuse is allowed when a pool
+cannot otherwise cover its objective. No question ID repeats within an attempt.
+
+Place `KnowledgeCheck` in the existing `knowledge-check-before` slot; the Chapter
+layout now puts that slot immediately after the intro, before objectives. Place
+After plus `ChapterProgress` in `knowledge-check-after`. Pass the same Chapter,
+catalog, and bank to both checks; pass `chapterId` to progress. Do not fork the
+Chapter renderer. Question contexts reuse the reading renderer with scoped DOM IDs
+so Before/After copies cannot collide. Explanations are rendered only for After;
+Before displays score, objective breakdown, and areas to pay attention to.
+
+Client scoring is inspectable static code, not an exam security boundary. Correct
+answer definitions must be available to the browser. Do not pretend the answer
+model is secret or add a backend. Prompts and authored feedback remain static
+escaped HTML; there is no runtime content fetch or generated explanation.
+
+Progress key: `ntdp-learning:progress:<chapterId>`, payload `schemaVersion: 1` and
+bank version. It stores first/latest Before, recent Pre IDs, latest/best After,
+up to 12 After summaries with answers/question IDs, objective scores, timestamps,
+and corresponding Pre attempt IDs. Improvement compares latest Before/After only
+when they belong to the same study cycle, using rounded percentage-point difference.
+First Before is preserved; best After compares score ratios. Storage contains no
+person/account/analytics identity and nothing is sent anywhere.
+
+Malformed data is scoped-reset; a known bank revision resets only that Chapter.
+Unknown newer schema data stays untouched until explicit reset. Denied storage or
+quota errors leave checks usable in memory with a visible notice. Reset requires
+opening the disclosure and explicitly confirming deletion; it never clears all
+storage or removes another Chapter/application key. Core content remains readable
+without JavaScript; both checks show an accessible unavailable message.
+
+The generated `/assessment/` QA fixture uses 36 neutral questions, three objectives,
+Before count 9 and After count 12. `/assessment-types/` tests every type together.
+These exist only in the excluded harness. `src/assessment/catalog.ts` contains no
+production banks. Never copy fixture strings into a real bank.
