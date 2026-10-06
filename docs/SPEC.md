@@ -30,7 +30,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 ## 3. Scope
 
 ### 3.1 In scope now
-- `[CONFIRMED]` Build the **Learning Hub before the personal site**. Its first screen is **Subject discovery**, rather than a document-storage-first interface. The eventual subdomain target is `learn.ntdp.id.vn`; the current milestone stages on the default GitHub Pages project URL.
+- `[CONFIRMED]` Build the **Learning Hub before the personal site**. Its first screen is **Subject discovery**, rather than a document-storage-first interface. During TASK-007, the Owner confirmed keeping the existing custom domain `learn.ntdp.id.vn` as the current publication target.
 - `[CONFIRMED]` **Personal site** on `ntdp.id.vn`: Home/About page in English, about the Owner only. The current site keeps running until the Owner approves a switch.
 - `[CONFIRMED]` Deployed on GitHub Pages; domain registered at TenTen.
 
@@ -55,7 +55,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[OPEN]` **Q-06** Which video/site sources are on the embed allowlist (for example YouTube)?
 - `[CONFIRMED]` **Q-07 / D-006:** The hierarchy is **Subject -> Part/Chapter -> Material**. Learning Path is removed from the Learning Hub model.
 - `[CONFIRMED]` The only initial Subjects are `ccna` / **CCNA** and `linux-system` / **Linux System**. No Parts, Chapters, Lessons, Materials, PDFs, Notes, or sample resources are approved yet. Never invent curriculum.
-- `[CONFIRMED]` Home contains the Learning Hub identity, a **Search subjects** control, a **Subjects** heading, and two accessible Subject card links. Cards navigate to `/subjects/ccna/` and `/subjects/linux-system/`, respecting the configured project base path.
+- `[CONFIRMED]` Home contains the Learning Hub identity, a **Search subjects** control, a **Subjects** heading, and two accessible Subject card links. Cards navigate to `/subjects/ccna/` and `/subjects/linux-system/`, respecting the configured base path.
 - `[CONFIRMED]` Subject search is entirely client-side and static, with no backend or network request. It trims surrounding whitespace, collapses repeated whitespace, matches case-insensitive substrings, and shows all Subjects for an empty query. An unmatched query displays exactly **No subjects found.** Both Subjects remain in generated HTML and visible if JavaScript fails; search may stay disabled until initialization.
 - `[CONFIRMED]` Each Subject page has the shared Learning Hub header, a way back to Subjects/home, its name as the page heading, and a **Chapters** section. Until real content is supplied, show exactly **Content coming soon.** and **Chapters and materials will appear here when they are ready.** No sample chapter cards, disabled fake controls, nonexistent content routes, or invented metadata.
 
@@ -81,11 +81,11 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 8. Hosting, domain, repository
 
-- `[CONFIRMED]` Hosting: GitHub Pages. Domain: `ntdp.id.vn` at TenTen. The eventual Learning Hub subdomain is `learn.ntdp.id.vn`. Current staging is `https://ntdatphu.github.io/learn.ntdp.id.vn/`; no custom domain, CNAME, or DNS changes belong to D-006.
+- `[CONFIRMED]` Hosting: GitHub Pages. Domain: `ntdp.id.vn` registered at TenTen. During TASK-007, the Owner explicitly confirmed keeping the existing Pages custom domain `learn.ntdp.id.vn`. The current target is `https://learn.ntdp.id.vn/`; the default GitHub Pages project URL redirects to that domain. This supersedes the earlier staging-only outcome for the current milestone. The personal site remains untouched.
 - `[CONFIRMED]` New repositories; Codex CLI runs on the Owner's computer.
-- `[CONFIRMED]` **P-08 / D-006 (Learning Hub staging):** Build and publish the Learning Hub at the default GitHub Pages project URL first. Use GitHub Actions with the official Astro Pages action and Pages `build_type: workflow`. Deployment runs on pushes to `main` and supports manual dispatch. The AI may configure Pages through existing authenticated tooling and merge verified work when repository protections permit. Custom-domain publication requires separate Owner approval; the personal site stays untouched.
+- `[CONFIRMED]` **P-08 / D-006 (completed Learning Hub staging):** The first milestone published at the default GitHub Pages project URL. During TASK-007, the Owner separately approved retaining the existing custom domain, superseding that staging URL as the current publication target. Continue using GitHub Actions with the official Astro Pages action and Pages `build_type: workflow`; deployment runs on pushes to `main` and supports manual dispatch. The AI may configure Pages through existing authenticated tooling and merge verified work when repository protections permit. The personal site stays untouched.
 - `[PROPOSED]` **P-15** Two repositories, one per site (GitHub Pages serves one site per repository; verify against current documentation).
-- `[CONFIRMED]` **Q-16:** Learning Hub subdomain target: `learn.ntdp.id.vn` (not configured in this staging milestone).
+- `[CONFIRMED]` **Q-16:** Learning Hub publication target: `learn.ntdp.id.vn`, retained by direct Owner confirmation during TASK-007. Serve the site and its Subject routes from the domain root.
 - `[CONFIRMED]` **Q-17 (Learning Hub):** The Learning Hub has its own repository, `ntdatphu/learn.ntdp.id.vn`. The personal-site repository layout remains open under P-15.
 - `[CONFIRMED]` **Q-18 / D-007 / P-25 (Learning Hub):** The Learning Hub shares the NTDP identity and design language of `ntdp.id.vn`, with a quieter education/content-focused presentation. Its footer links to `https://ntdp.id.vn/`; no personal-site cross-link belongs in its header. Other personal-site navigation and shared-code decisions remain outside this milestone.
 - `[CONFIRMED]` **Q-19:** Build the Learning Hub before rebuilding the personal site.
@@ -97,7 +97,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 9. Technology
 
-- `[CONFIRMED]` **Q-11 (Learning Hub):** Astro, static output, CSS, and minimal native client JavaScript. No backend, database, content API, or JavaScript framework integration is needed for D-006. Configure `site: https://ntdatphu.github.io` and `base: /learn.ntdp.id.vn`; all internal navigation must respect that base. The personal-site stack remains open.
+- `[CONFIRMED]` **Q-11 (Learning Hub):** Astro, static output, CSS, and minimal native client JavaScript. No backend, database, content API, or JavaScript framework integration is needed. Following the Owner's TASK-007 custom-domain confirmation, configure `site: https://learn.ntdp.id.vn` with the default root base. Internal navigation and local assets must continue to respect Astro's configured base. The earlier D-006 project-site configuration was `site: https://ntdatphu.github.io`, `base: /learn.ntdp.id.vn`. The personal-site stack remains open.
 
 ## 10. Design
 
