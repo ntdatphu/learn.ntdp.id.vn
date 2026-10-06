@@ -1,7 +1,177 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { subjects } from '../data/subjects.js';
 ---
 
 <BaseLayout title="Learning Hub">
-  <h1>Learning Hub</h1>
+  <header class="site-header">
+    <div class="page-width header-content">
+      <h1>Learning Hub</h1>
+      <div class="subject-search" role="search">
+        <label for="subject-search">Search subjects</label>
+        <input
+          id="subject-search"
+          type="search"
+          aria-controls="subject-list"
+          autocomplete="off"
+          disabled
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="page-width" aria-labelledby="subjects-heading">
+    <h2 id="subjects-heading">Subjects</h2>
+    <ul id="subject-list" class="subject-list">
+      {
+        subjects.map((subject) => (
+          <li
+            class="subject"
+            data-subject-id={subject.id}
+            data-subject-name={subject.name}
+          >
+            <h3>{subject.name}</h3>
+          </li>
+        ))
+      }
+    </ul>
+    <p id="search-status" class="search-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  </main>
 </BaseLayout>
+
+<script>
+  const searchInput = document.querySelector('input#subject-search');
+  const subjectList = document.getElementById('subject-list');
+  const searchStatus = document.getElementById('search-status');
+
+  if (
+    searchInput instanceof HTMLInputElement &&
+    subjectList instanceof HTMLUListElement &&
+    searchStatus instanceof HTMLElement
+  ) {
+    const entries = Array.from(
+      subjectList.querySelectorAll<HTMLElement>('li[data-subject-name]'),
+    );
+    const normalize = (value: string) =>
+      value.trim().replace(/\s+/g, ' ').toLowerCase();
+
+    function updateSubjects() {
+      const query = normalize(searchInput.value);
+      let matches = 0;
+
+      for (const entry of entries) {
+        const name = normalize(entry.dataset.subjectName ?? '');
+        const visible = name.includes(query);
+        entry.hidden = !visible;
+        if (visible) matches += 1;
+      }
+
+      const message = matches === 0 ? 'No subjects found.' : '';
+      if (searchStatus.textContent !== message) {
+        searchStatus.textContent = message;
+      }
+    }
+
+    searchInput.addEventListener('input', updateSubjects);
+    searchInput.addEventListener('search', updateSubjects);
+    updateSubjects();
+    searchInput.disabled = false;
+  }
+</script>
+
+<style>
+  .page-width {
+    width: min(calc(100% - 2rem), 68rem);
+    margin-inline: auto;
+  }
+
+  .site-header {
+    background: #fff;
+    border-bottom: 1px solid #e0e5ec;
+  }
+
+  .header-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 3rem;
+    padding-block: 1.5rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.35rem, 3vw, 1.65rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .subject-search {
+    flex: 1 1 24rem;
+    min-width: 0;
+    max-width: 36rem;
+    margin-inline-start: auto;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4b5869;
+  }
+
+  input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid #bac4d2;
+    border-radius: 0.5rem;
+    background: #f8fafc;
+    color: inherit;
+    font: inherit;
+  }
+
+  input:focus-visible {
+    outline: 2px solid #405b85;
+    outline-offset: 3px;
+  }
+
+  main {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+
+  h2 {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    font-weight: 600;
+  }
+
+  .subject-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .subject {
+    min-height: 7rem;
+    padding: 1.5rem;
+    border: 1px solid #e0e5ec;
+    border-radius: 0.75rem;
+    background: #fff;
+    overflow-wrap: anywhere;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .search-status {
+    margin: 1rem 0 0;
+    color: #4b5869;
+  }
+</style>
