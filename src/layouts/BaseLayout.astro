@@ -10,20 +10,22 @@ const { title = 'Learning Hub' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <main>
-      <slot />
-    </main>
+    <slot />
   </body>
 </html>
 
 <style>
-  body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    line-height: 1.5;
+  :global(*) {
+    box-sizing: border-box;
   }
 
-  main {
-    padding: 1rem;
+  body {
+    margin: 0;
+    font-family: 'Avenir Next', Avenir, 'Century Gothic', system-ui,
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    line-height: 1.5;
+    color: #202936;
+    background: #f6f7f9;
+    color-scheme: light;
   }
 </style>
