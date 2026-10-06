@@ -5,29 +5,33 @@ import { subjects } from '../data/subjects.js';
 ---
 
 <BaseLayout title="Learning Hub">
-  <div slot="header" class="subject-search" role="search">
-    <label for="subject-search">Search subjects</label>
-    <div class="search-field">
-      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.75" />
-        <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-      </svg>
-      <input
-        id="subject-search"
-        type="search"
-        aria-controls="subject-list"
-        autocomplete="off"
-        disabled
-      />
-    </div>
-  </div>
-
-  <main id="main-content" class="page-width" aria-labelledby="subjects-heading" tabindex="-1">
-    <h1 id="subjects-heading">Subjects</h1>
-    <ul id="subject-list" class="subject-list">
-      {subjects.map((subject) => <SubjectCard subject={subject} />)}
-    </ul>
-    <p id="search-status" class="search-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <main id="main-content" tabindex="-1">
+    <section class="home-intro" aria-labelledby="intro-heading">
+      <div class="page-width">
+        <p class="eyebrow">Learning Hub</p>
+        <h1 id="intro-heading">Explore by subject.</h1>
+        <p class="intro-summary">Notes, materials, and references organized around what I am learning.</p>
+        <div class="subject-search" role="search">
+          <label for="subject-search">Search subjects</label>
+          <div class="search-field">
+            <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.75" />
+              <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+            </svg>
+            <input id="subject-search" type="search" aria-controls="subject-list" autocomplete="off" disabled />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="subjects-section" aria-labelledby="subjects-heading">
+      <div class="page-width">
+        <h2 id="subjects-heading">Subjects</h2>
+        <ul id="subject-list" class="subject-list">
+          {subjects.map((subject) => <SubjectCard subject={subject} />)}
+        </ul>
+        <p id="search-status" class="search-status" role="status"></p>
+      </div>
+    </section>
   </main>
 </BaseLayout>
 

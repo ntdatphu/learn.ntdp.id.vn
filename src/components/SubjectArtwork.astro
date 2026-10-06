@@ -1,0 +1,113 @@
+---
+const { subjectId } = Astro.props;
+---
+
+<div class:list={['subject-artwork', `subject-artwork--${subjectId}`]} aria-hidden="true">
+  {subjectId === 'ccna' ? (
+    <svg viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ccna-device-top" x1="245" y1="125" x2="382" y2="203" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#75c9ff" /><stop offset="1" stop-color="#0071e3" />
+        </linearGradient>
+        <linearGradient id="ccna-device-front" x1="240" y1="175" x2="370" y2="233" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#187ee2" /><stop offset="1" stop-color="#0055b3" />
+        </linearGradient>
+        <radialGradient id="ccna-halo">
+          <stop stop-color="#b2dcff" stop-opacity=".8" /><stop offset="1" stop-color="#b2dcff" stop-opacity="0" />
+        </radialGradient>
+        <pattern id="ccna-grid" width="36" height="36" patternUnits="userSpaceOnUse">
+          <path d="M36 0H0v36" stroke="#0071e3" stroke-opacity=".055" />
+        </pattern>
+      </defs>
+      <path fill="url(#ccna-grid)" d="M0 0h640v360H0z" />
+      <ellipse cx="326" cy="186" rx="237" ry="164" fill="url(#ccna-halo)" />
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <path d="M146 252h48a34 34 0 0 0 34-34v-28h52M175 88h28a34 34 0 0 1 34 34v16h58M371 152h46a34 34 0 0 0 34-34V98h35M365 206h68a32 32 0 0 1 32 32v37h33" stroke="white" stroke-width="12" />
+        <path d="M146 252h48a34 34 0 0 0 34-34v-28h52M175 88h28a34 34 0 0 1 34 34v16h58M371 152h46a34 34 0 0 0 34-34V98h35M365 206h68a32 32 0 0 1 32 32v37h33" stroke="#75b9ec" stroke-width="3" />
+      </g>
+      <g fill="#0071e3" stroke="#eaf4ff" stroke-width="5">
+        <circle cx="206" cy="250" r="7" /><circle cx="237" cy="119" r="7" />
+        <circle cx="430" cy="147" r="7" /><circle cx="465" cy="250" r="7" />
+      </g>
+      <ellipse cx="317" cy="238" rx="96" ry="17" fill="#0071e3" fill-opacity=".09" />
+      <path d="m240 164 64-39 98 48-63 41-99-50Z" fill="url(#ccna-device-top)" stroke="#167ed9" />
+      <path d="m240 164 99 50v31l-99-50v-31Z" fill="url(#ccna-device-front)" />
+      <path d="m339 214 63-41v31l-63 41v-31Z" fill="#0052a5" />
+      <path d="m270 164 34-21 66 32-33 22-67-33Z" fill="#b8e3ff" fill-opacity=".65" />
+      <g fill="#d8f2ff">
+        <path d="m255 184 11 5.5v10l-11-5.5v-10Zm18 9 11 5.5v10l-11-5.5v-10Zm18 9 11 5.5v10l-11-5.5v-10Zm18 9 11 5.5v10l-11-5.5v-10Z" />
+      </g>
+      <path d="m353 222 30-19" stroke="#63ccfa" stroke-width="3" stroke-linecap="round" />
+      <g>
+        <circle cx="144" cy="252" r="35" fill="white" stroke="#c7e1f7" />
+        <circle cx="144" cy="252" r="22" fill="#dff1ff" />
+        <path d="M132 252h24m-7-7 7 7-7 7m-10-14-7 7 7 7" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="175" cy="88" r="24" fill="white" stroke="#c7e1f7" />
+        <rect x="164" y="79" width="22" height="15" rx="3" fill="#80c8ff" />
+        <path d="M168 99h14m-7-5v5" stroke="#0071e3" stroke-width="2" stroke-linecap="round" />
+        <circle cx="498" cy="98" r="31" fill="white" stroke="#c7e1f7" />
+        <circle cx="498" cy="98" r="16" fill="#ccedff" />
+        <path d="M498 85v26m-13-13h26" stroke="#0071e3" stroke-width="2" stroke-linecap="round" />
+        <rect x="490" y="247" width="74" height="55" rx="14" fill="white" stroke="#c7e1f7" />
+        <rect x="501" y="258" width="52" height="11" rx="4" fill="#b6ddfa" />
+        <rect x="501" y="278" width="52" height="11" rx="4" fill="#d8edfc" />
+        <circle cx="544" cy="263.5" r="2" fill="#0071e3" /><circle cx="544" cy="283.5" r="2" fill="#0071e3" />
+      </g>
+      <g fill="#70b7ed" opacity=".5">
+        <circle cx="99" cy="155" r="3" /><circle cx="545" cy="185" r="4" /><circle cx="318" cy="72" r="3" /><circle cx="364" cy="290" r="3" />
+      </g>
+    </svg>
+  ) : (
+    <svg viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="linux-terminal" x1="170" y1="67" x2="476" y2="297" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#363b45" /><stop offset="1" stop-color="#181b22" />
+        </linearGradient>
+        <linearGradient id="linux-server" x1="468" y1="208" x2="553" y2="308" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#606976" /><stop offset="1" stop-color="#333b48" />
+        </linearGradient>
+        <radialGradient id="linux-halo">
+          <stop stop-color="#d5e6f8" /><stop offset="1" stop-color="#d5e6f8" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="337" cy="191" rx="244" ry="171" fill="url(#linux-halo)" />
+      <g stroke="#b5c5d6" stroke-width="2" stroke-linecap="round">
+        <path d="M145 131h-29v122h35m-35-61h35M470 127h44v58" />
+      </g>
+      <rect x="90" y="107" width="51" height="37" rx="9" fill="white" stroke="#d2d9e2" />
+      <path d="M104 118h13m-13 8h23m-23 8h18" stroke="#9faebe" stroke-width="2" stroke-linecap="round" />
+      <rect x="93" y="177" width="42" height="30" rx="8" fill="white" stroke="#d2d9e2" />
+      <rect x="100" y="236" width="41" height="30" rx="8" fill="white" stroke="#d2d9e2" />
+      <path d="M104 192h20m-13 60h17" stroke="#79a9d6" stroke-width="3" stroke-linecap="round" />
+      <ellipse cx="337" cy="303" rx="180" ry="15" fill="#1d1d1f" fill-opacity=".07" />
+      <rect x="160" y="65" width="323" height="225" rx="19" fill="url(#linux-terminal)" stroke="#424853" />
+      <path d="M160 104h323" stroke="#535a66" stroke-opacity=".7" />
+      <g fill="#78818f">
+        <circle cx="181" cy="85" r="4" /><circle cx="197" cy="85" r="4" /><circle cx="213" cy="85" r="4" />
+      </g>
+      <rect x="366" y="82" width="92" height="5" rx="2.5" fill="#697383" fill-opacity=".6" />
+      <g stroke-linecap="round">
+        <path d="m188 129 9 7-9 7m18 0h13" stroke="#70beff" stroke-width="3" stroke-linejoin="round" />
+        <path d="M230 136h93M188 164h46M245 164h130M188 188h75M274 188h55M188 212h40M240 212h104" stroke="#7b899d" stroke-width="5" />
+        <path d="M230 136h66M245 164h52M274 188h39" stroke="#bad3ed" stroke-width="5" />
+        <path d="m188 240 9 7-9 7" stroke="#70beff" stroke-width="3" stroke-linejoin="round" />
+      </g>
+      <rect x="209" y="240" width="9" height="15" rx="2" fill="#70beff" />
+      <rect x="449" y="213" width="94" height="100" rx="14" fill="url(#linux-server)" stroke="#7b8796" />
+      <g fill="#28323f" stroke="#718297" stroke-width=".75">
+        <rect x="461" y="227" width="70" height="18" rx="5" />
+        <rect x="461" y="253" width="70" height="18" rx="5" />
+        <rect x="461" y="279" width="70" height="18" rx="5" />
+      </g>
+      <g fill="#70beff">
+        <circle cx="519" cy="236" r="3" /><circle cx="519" cy="262" r="3" /><circle cx="519" cy="288" r="3" />
+      </g>
+      <g stroke="#91a3b9" stroke-width="2" stroke-linecap="round">
+        <path d="M472 236h24m-24 26h24m-24 26h24" />
+      </g>
+      <g fill="#a9b8c9">
+        <circle cx="514" cy="184" r="5" /><circle cx="558" cy="143" r="3" /><circle cx="295" cy="39" r="3" /><circle cx="161" cy="311" r="3" />
+      </g>
+    </svg>
+  )}
+</div>
