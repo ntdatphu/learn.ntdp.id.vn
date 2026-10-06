@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SubjectArtwork from '../../components/SubjectArtwork.astro';
 import { subjects } from '../../data/subjects.js';
+import '../../styles/checklists.css';
 
 export function getStaticPaths() {
   return subjects.map((subject) => ({
@@ -24,7 +25,9 @@ const homeUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
         Back to Subjects
       </a>
       <div class="subject-intro__content">
-        <h1>{subject.name}</h1>
+        <div><h1>{subject.name}</h1>
+          {subject.id === 'ccna' && <a class="subject-resource-link" href={`${homeUrl}subjects/ccna/checklists/`}>Config checklists <span aria-hidden="true">→</span></a>}
+        </div>
         <SubjectArtwork subjectId={subject.id} />
       </div>
     </div>

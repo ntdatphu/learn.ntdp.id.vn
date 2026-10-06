@@ -65,3 +65,9 @@ questions/options. Each public question needs a defensible answer model, objecti
 alignment, technically valid distractors, an independently authored explanation,
 and an accurate review anchor. TASK-009 supplies only infrastructure and excluded
 synthetic fixtures; no commercial source is read for it.
+
+Config Checklist Library entries must be independently authored from factual
+configuration requirements. Do not copy or translate a source checklist, lightly
+paraphrase each step, mirror its distinctive presentation, or reproduce its badge.
+Preserve exact required CLI syntax. The inline and central versions must reference
+one shared checklist record; library metadata does not duplicate procedure prose.

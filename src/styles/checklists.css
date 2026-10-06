@@ -1,0 +1,17 @@
+.checklist-page { padding-block: 2rem 4rem; max-width: 52rem; }
+.checklist-page header { margin-block: 2.5rem 2rem; }
+.checklist-page h1 { font-size: clamp(2rem, 5vw, 3rem); }
+.checklist-empty { margin-block: 1rem; padding: clamp(1.5rem, 5vw, 3rem); border: 1px solid var(--color-border); border-radius: 1.25rem; background: var(--color-elevated); }
+.checklist-empty p { max-width: 34rem; margin: 0; color: #52525a; font-size: 1.0625rem; line-height: 1.65; }
+.checklist-groups { display: grid; gap: 2rem; }
+.checklist-groups h2 { margin-bottom: .75rem; font-size: 1.25rem; }
+.checklist-index { margin: 0; padding: 0; list-style: none; }
+.checklist-index li { border-bottom: 1px solid var(--color-border); }
+.checklist-index a { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem .5rem; min-height: 3rem; border-radius: .375rem; text-decoration: none; font-weight: 600; }
+.checklist-index a:hover { background: var(--color-surface); }
+.checklist-index a:active { background: #edf5ff; }
+.checklist-index a span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.checklist-page nav { margin-bottom: 2rem; line-height: 2; }
+.subject-resource-link { display: inline-flex; align-items: center; gap: .75rem; min-height: 2.75rem; margin-top: 1rem; font-weight: 600; text-underline-offset: .2em; }
+.checklist-page .learning-checklist, .checklist-page .checklist-groups { width: 100%; min-width: 0; }
+.checklist-page nav a { display: inline-flex; align-items: center; min-height: 2.75rem; }

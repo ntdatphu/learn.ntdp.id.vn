@@ -1,0 +1,16 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ConfigChecklist from '../components/learning/ConfigChecklist.astro';
+import type { Catalog, ConfigChecklist as Checklist } from '../learning/model';
+import '../styles/learning.css';
+import '../styles/checklists.css';
+interface Props { checklist: Checklist; catalog: Catalog }
+const { checklist, catalog } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<BaseLayout title={`${checklist.title} | CCNA Config checklists | Learning Hub`}>
+  <main id="main-content" class="page-width checklist-page learning-content" tabindex="-1">
+    <nav aria-label="Breadcrumb"><a href={`${base}/subjects/ccna/`}>CCNA</a><span aria-hidden="true"> / </span><a href={`${base}/subjects/ccna/checklists/`}>Config checklists</a></nav>
+    <ConfigChecklist checklist={checklist} catalog={catalog} level={1} />
+  </main>
+</BaseLayout>

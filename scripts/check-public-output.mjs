@@ -10,9 +10,9 @@ async function walk(directory, prefix = '') {
   }
 }
 await walk(output);
-assert.deepEqual(files.filter(path => path.endsWith('.html')).sort(), ['index.html', 'subjects/ccna/index.html', 'subjects/linux-system/index.html']);
+assert.deepEqual(files.filter(path => path.endsWith('.html')).sort(), ['index.html', 'subjects/ccna/checklists/index.html', 'subjects/ccna/index.html', 'subjects/linux-system/index.html']);
 for (const path of files) {
-  assert(!/fixture|\.pdf$|checklists\/|chapters\/|quiz\//i.test(path), `Unexpected public file: ${path}`);
+  assert(!/fixture|\.pdf$|chapters\/|quiz\//i.test(path), `Unexpected public file: ${path}`);
   if (/\.(html|css|js)$/.test(path)) {
     const text = await readFile(new URL(path, output), 'utf8');
     assert(!/SYNTHETIC[^<]*FIXTURE|fixture-reading|qa-tool|data-cli-copy|data-knowledge-check/.test(text), `Test/learning fixture leaked: ${path}`);
@@ -25,4 +25,10 @@ for (const subject of ['ccna', 'linux-system']) {
   assert(html.includes('Content coming soon.') && html.includes('Chapters and materials will appear here when they are ready.'));
   assert(!html.includes('/learn.ntdp.id.vn/'), 'Old project base returned');
 }
-console.log('Public output: only Home and the two empty-state Subject pages; no fixtures, curriculum, PDF, extra route, or external runtime resources.');
+const library = await readFile(new URL('subjects/ccna/checklists/index.html', output), 'utf8');
+assert(library.includes('Config checklists') && library.includes('Quick references will appear here as CCNA chapters are published.'));
+assert(!library.includes('class="checklist-index"'), 'Fake checklist entries detected');
+const ccna = await readFile(new URL('subjects/ccna/index.html', output), 'utf8');
+const linux = await readFile(new URL('subjects/linux-system/index.html', output), 'utf8');
+assert(ccna.includes('href="/subjects/ccna/checklists/"') && !linux.includes('/checklists/'), 'Subject checklist discoverability mismatch');
+console.log('Public output: only Home, two empty Subject pages and the empty CCNA Checklist Library; no fixtures, curriculum, PDF, detail routes, or external runtime resources.');

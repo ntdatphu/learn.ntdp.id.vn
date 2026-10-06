@@ -1,0 +1,12 @@
+---
+import type { Catalog, SubjectId } from '../../learning/model';
+import { checklistGroups, checklistHref } from '../../learning/checklists';
+import '../../styles/checklists.css';
+interface Props { catalog: Catalog; subjectId: SubjectId }
+const { catalog, subjectId } = Astro.props;
+const groups = checklistGroups(catalog, subjectId);
+---
+{groups.length ? <div class="checklist-groups">{groups.map((group, index) => <section aria-labelledby={`checklist-category-${index}`}>
+  <h2 id={`checklist-category-${index}`}>{group.label}</h2>
+  <ul class="checklist-index">{group.checklists.map(checklist => <li><a href={checklistHref(checklist, subjectId, import.meta.env.BASE_URL)}><span>{checklist.title}</span><span aria-hidden="true">→</span></a></li>)}</ul>
+</section>)}</div> : <div class="checklist-empty"><p>Quick references will appear here as CCNA chapters are published.</p></div>}
