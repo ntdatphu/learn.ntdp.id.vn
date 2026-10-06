@@ -1,0 +1,29 @@
+---
+const { title = 'Learning Hub' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+  }
+
+  main {
+    padding: 1rem;
+  }
+</style>
