@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { portChapter, portChecklist, portCommands, portTopics } from '../src/content/ccna/ethernet-port-operations.ts';
+import { portQuestionBank } from '../src/content/ccna/ethernet-port-questions.ts';
+import { validateCatalog } from '../src/learning/validate.ts';
+import { validateQuestionBank } from '../src/assessment/validate.ts';
+import { selectQuestions, scoreQuestions } from '../src/assessment/core.ts';
+import { chapterBlocks, keyTopicsFor } from '../src/learning/resolve.ts';
+import { checklistsForSubject } from '../src/learning/checklists.ts';
+const catalog = { parts: [{id:'ccna-ethernet-operations',subjectId:'ccna' as const,title:'Ethernet operations'}],chapters:[portChapter],checklists:[portChecklist],commands:portCommands,keyTopics:portTopics,checklistCategories:[{id:'ethernet-ports',label:'Ethernet ports',order:1}] };
+test('single pilot has valid shared content and all original assessment references',()=>{validateCatalog(catalog);validateQuestionBank(portQuestionBank,portChapter,catalog);assert.equal(portQuestionBank.questions.length,36);assert.equal(new Set(portQuestionBank.questions.map(q=>q.type)).size,8);});
+test('four objectives have nine independently authored records each',()=>{for(const o of portChapter.objectives)assert.equal(portQuestionBank.questions.filter(q=>q.objectiveId===o.id).length,9);});
+test('pilot Pre/Post and first retry are balanced and use different IDs when capacity permits',()=>{const pre=selectQuestions(portQuestionBank,portChapter.objectives,'before');const post=selectQuestions(portQuestionBank,portChapter.objectives,'after',{avoidIds:pre.map(q=>q.id)});const retry=selectQuestions(portQuestionBank,portChapter.objectives,'after',{avoidIds:pre.map(q=>q.id),recentIds:post.map(q=>q.id)});assert.equal(pre.length,8);assert.equal(post.length,12);for(const o of portChapter.objectives){assert.equal(pre.filter(q=>q.objectiveId===o.id).length,2);assert.equal(post.filter(q=>q.objectiveId===o.id).length,3);}assert(post.every(q=>!pre.some(p=>p.id===q.id)));assert(retry.every(q=>!pre.some(p=>p.id===q.id)&&!post.some(p=>p.id===q.id)));});
+test('authored answer model grades perfect and incomplete exact sets deterministically',()=>{const qs=portQuestionBank.questions;const answers=Object.fromEntries(qs.map(q=>[q.id,q.correctChoiceIds]));assert.equal(scoreQuestions(qs,answers,portChapter.objectives).correct,36);const multi=qs.filter(q=>q.type==='multiple-choice');for(const q of multi)answers[q.id]=[q.correctChoiceIds[0]];assert.equal(scoreQuestions(qs,answers,portChapter.objectives).correct,36-multi.length);});
+test('review and central library resolve exact inline records, without fake neighbors',()=>{assert.equal(checklistsForSubject(catalog,'ccna')[0],portChecklist);assert.deepEqual(checklistsForSubject(catalog,'linux-system'),[]);assert.equal(keyTopicsFor(portChapter,catalog).length,4);assert.equal(portChapter.previousId,undefined);assert.equal(portChapter.nextId,undefined);const blocks=chapterBlocks(portChapter);for(const kind of ['diagram','table','cli','note','walkthrough','guided-lab','challenge-lab','troubleshooting','checklist'])assert(blocks.some(b=>b.kind===kind));});
+
+test('real pilot commands opt into per-command copy without prompts or outputs',()=>{for(const command of portCommands){assert.equal(command.copyable,true);assert(!command.text.includes('Bench-SW'));assert(!command.text.includes('\n'));}});

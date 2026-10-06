@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.6; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.7; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -85,6 +85,12 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` `/subjects/ccna/checklists/` is reachable from a restrained CCNA Subject action; no global-header or Linux link. Empty copy: **Config checklists** / **Quick references will appear here as CCNA chapters are published.** No fake entries/categories/details or empty search/filter controls.
 - `[CONFIRMED]` Inline Chapter, library, detail and related navigation reuse one checklist record. Categories support stable IDs, display labels and explicit ordering; checklist order is author-controlled. Only categories with actual records render. Detail routes generate only for checklists related to published CCNA Chapters.
 - `[CONFIRMED]` Compact reference rows and mobile-first ordered steps, exact command references, verification, common mistakes and semantic related-Chapter links. Desktop/fine-pointer per-command copy reuses TASK-008; no Copy all. Source checklist prose/layout must be independently authored, never copied/translated/lightly paraphrased.
+
+### 4.4 First CCNA content pilot — review candidate
+
+- `[CONFIRMED]` One independently authored Chapter candidate may exercise the real Part/Chapter presentation, original diagrams/tables/CLI/checklist/labs/troubleshooting and Before/After checks. The candidate stops at a **Draft PR** for Owner/Planner content review; it is not merged or deployed. No neighboring Chapter or second Chapter is invented or processed.
+- `[CONFIRMED]` Source inventory, page mapping, factual Knowledge Specification and assessment blueprint stay in a dedicated private directory outside Git. Public authoring follows source review → factual extraction → source closed → independent authoring → technical/copyright/learning/visual QA. No source PDF, text dump, images, questions, choices, lab scenarios or private manifest enters the public repository.
+- `[CONFIRMED]` The candidate Checklist uses the same record inline and centrally. Questions have stable objective alignment and original wording/scenarios. Technical commands remain exact; illustrative CLI output and device/media limitations must be clear. The first pilot is reviewed before establishing the long-term CCNA Chapter Standard v1.
 
 ## 5. Access
 

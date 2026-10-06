@@ -1,3 +1,4 @@
 import type { QuestionBank } from './model';
-/** No real question banks until independently authored content is approved. */
-export const questionBanks: readonly QuestionBank[] = [];
+import { portQuestionBank } from '../content/ccna/ethernet-port-questions';
+/** Independently authored pilot bank; public release is gated by its Draft PR review. */
+export const questionBanks: readonly QuestionBank[] = [portQuestionBank];
