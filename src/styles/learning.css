@@ -83,6 +83,10 @@
 .learning-disclosure summary { min-height: 3rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 600; cursor: pointer; }
 .learning-disclosure > :not(summary) { margin: 0; padding: 1.25rem; border-top: 1px solid var(--color-border); }
 .learning-disclosure > ul { padding-inline-start: 2.5rem; }
+.learning-related-chapters { margin-top: 1.5rem; }
+.learning-related-chapters .learning-label { margin-bottom: 0.5rem; }
+.learning-content .learning-related-chapters ul { margin: 0; padding-inline-start: 1.25rem; }
+.learning-related-chapters a { font-weight: 600; }
 .learning-review ul { margin-bottom: 0; }
 .learning-review li { padding-block: 0.5rem; }
 .learning-review a { font-weight: 600; }

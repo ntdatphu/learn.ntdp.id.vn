@@ -18,5 +18,10 @@ const related = catalog.chapters.filter(chapter => checklist.relatedChapterIds?.
   </li>)}</ol>
   {checklist.verification?.length ? <div><p class="learning-label">Verification</p><ul>{checklist.verification.map(item => <li>{item}</li>)}</ul></div> : null}
   {checklist.commonMistakes?.length ? <details class="learning-disclosure"><summary>Common mistakes</summary><ul>{checklist.commonMistakes.map(item => <li>{item}</li>)}</ul></details> : null}
-  {related.length > 0 && <p>Related chapters: {related.map(chapter => <a href={chapterHref(chapter, import.meta.env.BASE_URL)}>{chapter.title}</a>)}</p>}
+  {related.length > 0 && <div class="learning-related-chapters">
+    <p class="learning-label">Related chapters</p>
+    <ul>
+      {related.map(chapter => <li><a href={chapterHref(chapter, import.meta.env.BASE_URL)}>{chapter.title}</a></li>)}
+    </ul>
+  </div>}
 </section>
