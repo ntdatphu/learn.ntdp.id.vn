@@ -9,3 +9,6 @@ for (const route of ['assessment', 'assessment-types']) {
   await mkdir(folder, { recursive: true });
   await writeFile(new URL('index.astro', folder), `---\nimport Fixture from '../../../../tests/fixtures/AssessmentFixture.astro';\n---\n<Fixture allTypes={${route === 'assessment-types'}} />\n`);
 }
+const checklistFolder = new URL('checklists/', pages);
+await mkdir(checklistFolder, { recursive: true });
+await writeFile(new URL('index.astro', checklistFolder), `---\nimport Fixture from '../../../../tests/fixtures/ChecklistFixture.astro';\n---\n<Fixture />\n`);

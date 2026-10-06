@@ -68,12 +68,14 @@ export interface ConfigChecklist {
   id: string;
   title: string;
   category: string;
+  order?: number;
   purpose?: string;
   steps: readonly ChecklistStep[];
   verification?: readonly string[];
   commonMistakes?: readonly string[];
   relatedChapterIds?: readonly string[];
 }
+export interface ChecklistCategory { id: string; label: string; order: number }
 export interface Walkthrough {
   kind: 'walkthrough';
   id: string;
@@ -146,4 +148,5 @@ export interface Catalog {
   keyTopics: readonly KeyTopic[];
   commands: readonly Command[];
   checklists: readonly ConfigChecklist[];
+  checklistCategories?: readonly ChecklistCategory[];
 }

@@ -86,7 +86,7 @@
 .learning-related-chapters { margin-top: 1.5rem; }
 .learning-related-chapters .learning-label { margin-bottom: 0.5rem; }
 .learning-content .learning-related-chapters ul { margin: 0; padding-inline-start: 1.25rem; }
-.learning-related-chapters a { font-weight: 600; }
+.learning-related-chapters a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 600; }
 .learning-review ul { margin-bottom: 0; }
 .learning-review li { padding-block: 0.5rem; }
 .learning-review a { font-weight: 600; }

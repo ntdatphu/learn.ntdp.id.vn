@@ -1,0 +1,10 @@
+---
+import ChecklistLayout from '../../../../layouts/ChecklistLayout.astro';
+import { catalog } from '../../../../learning/catalog';
+import { checklistsForSubject } from '../../../../learning/checklists';
+export function getStaticPaths() {
+  return checklistsForSubject(catalog, 'ccna').map(checklist => ({ params: { id: checklist.id }, props: { checklist } }));
+}
+const { checklist } = Astro.props;
+---
+<ChecklistLayout checklist={checklist} catalog={catalog} />

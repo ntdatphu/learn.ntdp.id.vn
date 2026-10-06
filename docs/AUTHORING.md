@@ -199,3 +199,20 @@ The generated `/assessment/` QA fixture uses 36 neutral questions, three objecti
 Before count 9 and After count 12. `/assessment-types/` tests every type together.
 These exist only in the excluded harness. `src/assessment/catalog.ts` contains no
 production banks. Never copy fixture strings into a real bank.
+
+## 10. Checklist Library
+
+`ConfigChecklist` records remain in `catalog.checklists`: inline and detail render
+that exact record through the same component. `checklistsForSubject` exposes only
+records related to a published Chapter of that Subject. The CCNA index and static
+detail paths consume this helper; no records means no detail paths.
+
+For central grouping, use a category ID in `checklist.category` and optional
+`catalog.checklistCategories` metadata (`id`, `label`, numeric `order`). Older
+inline references may use an authored category label without registry metadata.
+Only populated groups render; optional numeric checklist `order` controls rows,
+with stable ID as a deterministic tie-breaker. No production categories exist yet.
+Related Chapter IDs, steps, command references, purpose, verification and mistakes
+are authored once. Do not create duplicate library content or a second clipboard
+implementation. Synthetic library/reference QA lives only in `/checklists/` of
+the isolated fixture build.

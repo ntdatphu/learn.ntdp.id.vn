@@ -2,18 +2,19 @@
 import type { Catalog, ConfigChecklist } from '../../learning/model';
 import CliExample from './CliExample.astro';
 import { chapterHref } from '../../learning/resolve';
-interface Props { checklist: ConfigChecklist; catalog: Catalog; level?: 3 | 4 | 5 }
+import { checklistCategoryLabel } from '../../learning/checklists';
+interface Props { checklist: ConfigChecklist; catalog: Catalog; level?: 1 | 3 | 4 | 5 }
 const { checklist, catalog, level = 3 } = Astro.props;
-const Heading = `h${level}` as 'h3' | 'h4' | 'h5';
+const Heading = `h${level}` as 'h1' | 'h3' | 'h4' | 'h5';
 const related = catalog.chapters.filter(chapter => checklist.relatedChapterIds?.includes(chapter.id) && chapter.publication === 'published');
 ---
 <section class="learning-checklist" aria-labelledby={checklist.id}>
-  <p class="learning-label">Config Checklist · {checklist.category}</p>
+  <p class="learning-label">Config Checklist · {checklistCategoryLabel(checklist, catalog)}</p>
   <Heading id={checklist.id}>{checklist.title}</Heading>
   {checklist.purpose && <p>{checklist.purpose}</p>}
   <ol class="learning-steps">{checklist.steps.map(step => <li id={`${checklist.id}-${step.id}`}>
-    <p>{step.instruction}</p>
-    {step.commandIds?.length ? <CliExample example={{ kind: 'cli', id: `${checklist.id}-${step.id}-commands`, caption: 'Related commands', lines: step.commandIds.map(commandId => ({ kind: 'command', commandId })) }} catalog={catalog} /> : null}
+    <p id={`${checklist.id}-${step.id}-instruction`}>{step.instruction}</p>
+    {step.commandIds?.length ? <CliExample example={{ kind: 'cli', id: `${checklist.id}-${step.id}-commands`, caption: 'Related commands', lines: step.commandIds.map(commandId => ({ kind: 'command', commandId })) }} catalog={catalog} contextLabelledBy={`${checklist.id}-${step.id}-instruction`} /> : null}
     {step.verification && <p class="learning-verification"><strong>Verify:</strong> {step.verification}</p>}
   </li>)}</ol>
   {checklist.verification?.length ? <div><p class="learning-label">Verification</p><ul>{checklist.verification.map(item => <li>{item}</li>)}</ul></div> : null}

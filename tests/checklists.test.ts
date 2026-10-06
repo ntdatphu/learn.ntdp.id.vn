@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { checklistGroups, checklistsForSubject, checklistHref } from '../src/learning/checklists.ts';
+import { validateCatalog } from '../src/learning/validate.ts';
+import { fixtureCatalog, fixtureChapter } from './fixtures/chapter.ts';
+const checklist = fixtureCatalog.checklists[0];
+const catalog = { ...fixtureCatalog, chapters: [{ ...fixtureChapter, publication: 'published' as const }], checklistCategories: [{ id: 'late', label: 'Late', order: 2 }, { id: 'early', label: 'Early', order: 1 }, { id: 'unused', label: 'Unused', order: 0 }], checklists: [{ ...checklist, id: 'c', category: 'late', order: 1 }, { ...checklist, id: 'b', category: 'early', order: 2 }, { ...checklist, id: 'a', category: 'early', order: 1 }] };
+test('library uses original shared checklist records and omits draft/other Subjects', () => { assert.equal(checklistsForSubject(catalog,'ccna')[0],catalog.checklists[0]); assert.equal(checklistsForSubject(catalog,'linux-system').length,0); assert.equal(checklistsForSubject(fixtureCatalog,'ccna').length,0); });
+test('only populated categories render in explicit category/checklist order', () => { const groups=checklistGroups(catalog,'ccna'); assert.deepEqual(groups.map(g=>g.id),['early','late']); assert.deepEqual(groups[0].checklists.map(c=>c.id),['a','b']); assert.equal(groups[0].label,'Early'); });
+test('inline-only category labels remain usable without optional metadata', () => { assert.equal(checklistGroups({...catalog,checklistCategories:undefined},'ccna').length,2); });
+test('detail links honor root and project base', () => { assert.equal(checklistHref(checklist,'ccna'),'/subjects/ccna/checklists/fixture-checklist/'); assert.equal(checklistHref(checklist,'ccna','/learn.ntdp.id.vn/'),'/learn.ntdp.id.vn/subjects/ccna/checklists/fixture-checklist/'); });
+test('invalid order is rejected during authoring', () => { assert.throws(()=>validateCatalog({...catalog,checklistCategories:[{id:'bad',label:'Bad',order:NaN}]})); assert.throws(()=>validateCatalog({...catalog,checklists:[{...checklist,order:Infinity}]})); });

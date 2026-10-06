@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.5; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.6; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -69,7 +69,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` Structured CLI distinguishes prompt, command, output, comment, teaching emphasis, and verified result. Desktop/fine-pointer controls copy **one command text only**, never prompt/output; no Copy all. Copy controls are hidden/disabled on narrow or coarse-pointer presentations. Clipboard success is announced briefly; failure leaves manual text selection available.
 - `[CONFIRMED]` Config Checklists are one shared record with stable ID, title/category, ordered steps, command references, and optional purpose, verification, mistakes, and related Chapter IDs. The same record renders inline and later in a library. Walkthroughs compose short steps; Guided Labs distinguish goal/start, action, rationale, verification, and expected result. Challenge Labs have requirements, optional hints, and an initially hidden accessible solution. Troubleshooting supports symptoms/evidence, learner prompt, disclosed diagnosis, explanation, corrective action, and verification.
 - `[CONFIRMED]` Reading uses the D-007 identity, calm light-only editorial layout, approximately 44–48rem prose measure and 1.65–1.75 line-height. Wider tables/diagrams may escape that measure. Core content and native disclosures remain usable without JavaScript. Minimal client enhancement, local SVG/system fonts, no runtime content fetch or external visual assets.
-- `[CONFIRMED]` **TASK-009:** Reusable **Knowledge Check — Before/After**, question banks, scoring, objective breakdown, and **local-only progress** are implemented as infrastructure with non-public synthetic fixtures. No real question bank or public assessment exists before the content pilot. The future CCNA Checklist Library at `/subjects/ccna/checklists/` belongs to TASK-010; it reuses the same checklist data and is not routed in TASK-008. Cross-device/account progress remains deferred.
+- `[CONFIRMED]` **TASK-009:** Reusable **Knowledge Check — Before/After**, question banks, scoring, objective breakdown, and **local-only progress** are implemented as infrastructure with non-public synthetic fixtures. No real question bank or public assessment exists before the content pilot. The CCNA Checklist Library at `/subjects/ccna/checklists/` is implemented in TASK-010 and reuses the same checklist data; it remains empty until real CCNA Chapters are published. Cross-device/account progress remains deferred.
 
 
 ### 4.2 Assessment and local progress — TASK-009
@@ -79,6 +79,12 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` Scoring is deterministic: 1 for a correct answer, 0 otherwise; multiple choice requires the exact set, without partial or negative credit. Results show raw score, percentage, and objective breakdown. Before highlights objectives needing attention without detailed explanations. After shows correct/incorrect text, correct answer, authored explanations/distractor guidance, and valid review links. Improvement is percentage-point difference, not relative growth.
 - `[CONFIRMED]` Progress stays only in this browser/device; nothing is transmitted to NTDP or third parties. Versioned scoped storage supports first/latest Pre, latest/best and bounded Post attempts, objective results, question IDs, and study timestamps. Malformed/denied storage must not break reading or checks. Reset requires deliberate confirmation and removes only relevant Learning Hub data, never unrelated browser storage. No person/account/analytics identifiers, accounts, backend, or cloud sync.
 - `[CONFIRMED]` No XP/streaks/badges/ranks/leaderboards/achievements. Core learning content stays usable without JavaScript; assessment unavailability is announced accessibly. Privacy copy: **Progress is stored only in this browser/device. Nothing is sent to NTDP or third parties.** No new Privacy page in TASK-009.
+
+### 4.3 CCNA Config Checklist Library — TASK-010
+
+- `[CONFIRMED]` `/subjects/ccna/checklists/` is reachable from a restrained CCNA Subject action; no global-header or Linux link. Empty copy: **Config checklists** / **Quick references will appear here as CCNA chapters are published.** No fake entries/categories/details or empty search/filter controls.
+- `[CONFIRMED]` Inline Chapter, library, detail and related navigation reuse one checklist record. Categories support stable IDs, display labels and explicit ordering; checklist order is author-controlled. Only categories with actual records render. Detail routes generate only for checklists related to published CCNA Chapters.
+- `[CONFIRMED]` Compact reference rows and mobile-first ordered steps, exact command references, verification, common mistakes and semantic related-Chapter links. Desktop/fine-pointer per-command copy reuses TASK-008; no Copy all. Source checklist prose/layout must be independently authored, never copied/translated/lightly paraphrased.
 
 ## 5. Access
 

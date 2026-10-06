@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../src/layouts/BaseLayout.astro';
+import ChecklistLibrary from '../../src/components/learning/ChecklistLibrary.astro';
+import ConfigChecklist from '../../src/components/learning/ConfigChecklist.astro';
+import { fixtureCatalog, fixtureChapter } from './chapter';
+import '../../src/styles/learning.css';
+import '../../src/styles/checklists.css';
+const catalog = { ...fixtureCatalog,
+  chapters: [{ ...fixtureChapter, publication: 'published' as const }, { ...fixtureChapter, id: 'fixture-related', slug: 'fixture-related', title: 'Another synthetic chapter link', publication: 'published' as const }],
+  checklistCategories: [{ id: 'fixture-category', label: 'Synthetic references', order: 1 }],
+  checklists: [{ ...fixtureCatalog.checklists[0], category: 'fixture-category', relatedChapterIds: ['fixture-reading', 'fixture-related'] }],
+};
+---
+<BaseLayout title="Synthetic checklist fixture — not published">
+  <main id="main-content" class="page-width checklist-page learning-content" tabindex="-1">
+    <h1>SYNTHETIC CHECKLIST FIXTURE — NOT PUBLISHED</h1>
+    <ChecklistLibrary catalog={catalog} subjectId="ccna" />
+    <ConfigChecklist checklist={catalog.checklists[0]} catalog={catalog} level={3} />
+  </main>
+</BaseLayout>
