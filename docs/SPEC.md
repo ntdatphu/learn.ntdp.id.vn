@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.2; Learning Hub decisions confirmed through D-006 · 2026-10-06 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.3; Learning Hub decisions confirmed through D-007 / P-25 · 2026-10-06 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -87,7 +87,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[PROPOSED]` **P-15** Two repositories, one per site (GitHub Pages serves one site per repository; verify against current documentation).
 - `[CONFIRMED]` **Q-16:** Learning Hub subdomain target: `learn.ntdp.id.vn` (not configured in this staging milestone).
 - `[CONFIRMED]` **Q-17 (Learning Hub):** The Learning Hub has its own repository, `ntdatphu/learn.ntdp.id.vn`. The personal-site repository layout remains open under P-15.
-- `[OPEN]` **Q-18** How do the two sites relate: cross-links and navigation, same look or different, shared components?
+- `[CONFIRMED]` **Q-18 / D-007 / P-25 (Learning Hub):** The Learning Hub shares the NTDP identity and design language of `ntdp.id.vn`, with a quieter education/content-focused presentation. Its footer links to `https://ntdp.id.vn/`; no personal-site cross-link belongs in its header. Other personal-site navigation and shared-code decisions remain outside this milestone.
 - `[CONFIRMED]` **Q-19:** Build the Learning Hub before rebuilding the personal site.
 - `[OPEN]` **Q-01** Where is the current site and its repository (visibility, what is wrong with it, keep or archive)? The planner could not read the current site (bot protection) and the public GitHub profile shows a single repository.
 - `[OPEN]` **Q-04** Does the Owner have GitHub Pro or student benefits? What is the yearly budget limit for domain and services?
@@ -101,9 +101,19 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 10. Design
 
-- `[CONFIRMED]` **Q-12 (Learning Hub):** Simple, modern, professional, light-only, responsive, neutral, and content-first. Use one restrained visual system on Home and Subject pages, with clear hover, focus-visible, and active link treatments. No large decorative hero, marketing copy, distracting animation, or copied platform branding.
-- `[CONFIRMED]` Local/system fonts only: no downloaded fonts, font packages, external font requests, or `@font-face`. The layout tolerates different system font metrics. Preferred stack: `"Avenir Next", Avenir, "Century Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif`.
-- `[CONFIRMED]` D-006 must work from approximately 320px through large desktop screens, without page-level horizontal overflow. Verify 320px, 768px, and 1280px, keyboard navigation, and 200% browser zoom where tooling permits. Use semantic headings, labeled search, appropriate search status announcements, practical contrast, usable touch targets, and meaningful Subject page titles.
+- `[CONFIRMED]` **Q-12 / D-007 / APPROVED P-25 (Learning Hub):** A simple, modern, professional, light-only, responsive, content-focused variation of the Owner's NTDP system. Reuse the personal site's visual identity and base palette/typography, without cloning its showcase layout. No giant dark hero, orbit graphics, floating 3D hero panels, portfolio sections, or distracting animation.
+- `[CONFIRMED]` The shared palette is primary text `#1d1d1f`, muted text `#6e6e73`, light surface `#f5f5f7`, elevated surface approximately `#fbfbfd`/white, accent `#0071e3`, hover accent approximately `#0077ed`, and subtle black-alpha borders. Use restrained heading weights, tight line-height, negative letter-spacing, generous but controlled spacing, and card radii around 24–32px. Maintain practical AA contrast in interaction states.
+- `[CONFIRMED]` Use a local, lightweight, static NTDP mark from the Owner's personal-site repository. Deriving/optimizing the existing geometry is allowed while preserving recognizable identity. No animated hero treatment or runtime hotlinks.
+- `[CONFIRMED]` The shared header is sticky, compact (approximately 52–56px), translucent white with subtle backdrop blur and a very light bottom border. It contains only the NTDP mark and **Learning Hub** identity/home link; no search, hamburger, accounts, or personal-site cross-link.
+- `[CONFIRMED]` Home has a compact white intro: eyebrow **Learning Hub**, heading **Explore by subject.**, and supporting copy **Notes, materials, and references organized around what I am learning.** Place the labeled **Search subjects** control below, approximately 600–680px maximum width with a comfortable 44px+ target. Keep the existing static search behavior and exact **No subjects found.** status; do not add suggestion copy.
+- `[CONFIRMED]` Anchor the **Subjects** section on a very light `#f5f5f7` surface. Two substantial media-style cards sit side by side when space permits and stack on mobile, each with original decorative artwork, its real Subject name, an arrow, and a full-card native link. Do not add curriculum descriptions, counts, progress, badges, tags, or other invented metadata.
+- `[CONFIRMED]` CCNA artwork is original local SVG/CSS networking imagery: abstract nodes, connection paths, packet dots, or geometric device forms using blue/cyan and neutral tones. It is conceptual decoration, not a real topology or curriculum. No Cisco logo or decorative trademark branding.
+- `[CONFIRMED]` Linux System artwork is original local SVG/CSS systems imagery: abstract terminal rows, server forms, process grids, or filesystem branching using graphite/neutral tones with blue accents. No Tux, distro logos, external images, or copied illustrations. All artwork is decorative and hidden from assistive technology.
+- `[CONFIRMED]` Subject pages use an editorial composition with Back to Subjects, a large Subject H1, adjacent artwork on desktop and title-first stacking on mobile, followed by Chapters and the unchanged empty-state copy. No sample rows, disabled chapter controls, or nonexistent content routes. Future chapters should fit editorial lists; future reading should fit approximately 44–48rem width and 1.7 line-height, without adding unused pages/components now.
+- `[CONFIRMED]` The restrained footer contains **NTDP Learning Hub**, **Learning, one subject at a time.**, **© <current year> Nguyễn Trần Đạt Phú**, and a small **ntdp.id.vn** link. Do not move this cross-link into the header.
+- `[CONFIRMED]` Use restrained card/link microinteractions around 180–300ms, with clear hover, focus-visible, and active states. Remove nonessential motion under `prefers-reduced-motion`. No continuous decorative motion is required.
+- `[CONFIRMED]` Local/system fonts only: no downloaded fonts, font packages, external font requests, or `@font-face`. The layout tolerates different system font metrics. D-007 preferred stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif`.
+- `[CONFIRMED]` D-007 must work from approximately 320px through large desktop screens, without page-level horizontal overflow. Verify 320px, 375px, 768px, 1024px, 1280px, and 1920px; inspect screenshots and interaction states; verify keyboard navigation, reduced motion, and real 200% browser zoom where tooling permits. Use semantic headings, labeled search, appropriate search status announcements, practical contrast, usable touch targets, and meaningful Subject page titles.
 - `[OPEN]` Personal-site visual direction remains undecided.
 
 ## 11. Security and privacy
@@ -147,4 +157,4 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 18. Open questions, index
 
-Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 note features · Q-06 embed allowlist · Q-08 Apple sign-in · Q-09 personal-site repo name · Q-10 personal-site repo visibility · Q-11 personal-site stack · Q-12 personal-site design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and signing · Q-17 personal-site repository layout · Q-18 relation between the two sites.
+Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 note features · Q-06 embed allowlist · Q-08 Apple sign-in · Q-09 personal-site repo name · Q-10 personal-site repo visibility · Q-11 personal-site stack · Q-12 personal-site design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and signing · Q-17 personal-site repository layout.
