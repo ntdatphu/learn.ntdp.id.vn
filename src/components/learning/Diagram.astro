@@ -1,0 +1,27 @@
+---
+import type { DiagramBlock } from '../../learning/model';
+interface Props { diagram: DiagramBlock }
+const { diagram } = Astro.props;
+---
+<figure class="learning-diagram" id={diagram.id}>
+  <div class="diagram-surface">
+    <svg viewBox={`0 0 ${diagram.width} ${diagram.height}`} role="img" aria-labelledby={`${diagram.id}-title`} xmlns="http://www.w3.org/2000/svg">
+      <title id={`${diagram.id}-title`}>{diagram.caption}</title>
+      <desc>{diagram.description}</desc>
+      {diagram.links.map(link => {
+        const from = diagram.nodes.find(node => node.id === link.from)!;
+        const to = diagram.nodes.find(node => node.id === link.to)!;
+        return <g class="diagram-link"><line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke-dasharray={link.wireless ? '6 5' : undefined} />{link.label && <text x={(from.x + to.x) / 2} y={(from.y + to.y) / 2 - 12}>{link.label}</text>}</g>;
+      })}
+      {diagram.nodes.map((node, index) => <g transform={`translate(${node.x},${node.y})`} class="diagram-node">
+        {node.kind === 'cloud' ? <path d="M-30 14C-46 10-43-12-27-15C-24-38 11-38 18-19C43-23 48 14 29 17H-30Z" /> : <rect x="-34" y="-24" width="68" height="48" rx={node.kind === 'router' ? 24 : 9} />}
+        {node.kind === 'server' ? <g class="diagram-node-detail"><path d="M-20-10H20M-20 0H20M-20 10H20" /></g> : node.kind === 'switch' ? <g class="diagram-node-detail"><path d="M-22 0H22M-14-8L-22 0-14 8M14-8L22 0 14 8" /></g> : node.kind === 'client' ? <g class="diagram-node-detail"><path d="M-19-13H19V9H-19ZM-10 16H10M0 9V16" /></g> : node.kind === 'router' ? <g class="diagram-node-detail"><path d="M-19 0H19M0-15V15" /></g> : null}
+        <circle cx="30" cy="-22" r="14" class="diagram-number-surface" />
+        <text x="30" y="-17" class="diagram-number">{index + 1}</text>
+      </g>)}
+    </svg>
+  </div>
+  <figcaption>{diagram.caption}</figcaption>
+  <p class="diagram-description">{diagram.description}</p>
+  <ol class="diagram-legend">{diagram.nodes.map(node => <li>{node.label}</li>)}</ol>
+</figure>

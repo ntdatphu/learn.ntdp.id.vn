@@ -1,0 +1,9 @@
+---
+import type { KeyTopic } from '../../learning/model';
+interface Props { topics: readonly KeyTopic[] }
+const { topics } = Astro.props;
+---
+{topics.length > 0 && <section class="learning-review reading-measure" aria-labelledby="key-topics-review">
+  <h2 id="key-topics-review">Key Topics to remember</h2>
+  <ul>{topics.map(topic => <li><a href={`#${topic.id}`}>{topic.title}</a><p>{topic.summary}</p></li>)}</ul>
+</section>}

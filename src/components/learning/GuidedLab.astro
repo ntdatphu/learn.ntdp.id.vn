@@ -1,0 +1,19 @@
+---
+import type { Catalog, GuidedLab } from '../../learning/model';
+import ReadingBlocks from './ReadingBlocks.astro';
+interface Props { exercise: GuidedLab; catalog: Catalog }
+const { exercise, catalog } = Astro.props;
+---
+<section class="learning-exercise" aria-labelledby={exercise.id}>
+  <p class="learning-label">Guided Lab</p><h3 id={exercise.id}>{exercise.title}</h3>
+  <p><strong>Goal:</strong> {exercise.goal}</p>
+  <p class="learning-label">Starting state</p><ReadingBlocks blocks={exercise.startingState} catalog={catalog} />
+  {exercise.prerequisites?.length ? <div><p class="learning-label">Prerequisites</p><ul>{exercise.prerequisites.map(item => <li>{item}</li>)}</ul></div> : null}
+  <ol class="learning-steps">{exercise.steps.map(step => <li>
+    <h4 id={`${exercise.id}-${step.id}`}>{step.title}</h4>
+    <p class="learning-label">Action</p><ReadingBlocks blocks={step.action} catalog={catalog} />
+    <p class="learning-rationale"><strong>Why this matters:</strong> {step.why}</p>
+    <p class="learning-label">Verify</p><ReadingBlocks blocks={step.verify} catalog={catalog} />
+    <p class="learning-verification"><strong>Expected result:</strong> {step.expectedResult}</p>
+  </li>)}</ol>
+</section>

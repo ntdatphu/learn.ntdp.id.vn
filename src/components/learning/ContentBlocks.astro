@@ -1,0 +1,20 @@
+---
+import type { Block, Catalog } from '../../learning/model';
+import { requireRecord } from '../../learning/resolve';
+import ReadingBlocks from './ReadingBlocks.astro';
+import KeyTopic from './KeyTopic.astro';
+import ConfigChecklist from './ConfigChecklist.astro';
+import Walkthrough from './Walkthrough.astro';
+import GuidedLab from './GuidedLab.astro';
+import ChallengeLab from './ChallengeLab.astro';
+import Troubleshooting from './Troubleshooting.astro';
+interface Props { blocks: readonly Block[]; catalog: Catalog }
+const { blocks, catalog } = Astro.props;
+---
+{blocks.map(block => block.kind === 'key-topic' ? <div class="learning-block reading-measure"><KeyTopic topic={requireRecord(catalog.keyTopics, block.topicId)} /></div> :
+  block.kind === 'checklist' ? <div class="learning-block"><ConfigChecklist checklist={requireRecord(catalog.checklists, block.checklistId)} catalog={catalog} /></div> :
+  block.kind === 'walkthrough' ? <div class="learning-block"><Walkthrough exercise={block} catalog={catalog} /></div> :
+  block.kind === 'guided-lab' ? <div class="learning-block"><GuidedLab exercise={block} catalog={catalog} /></div> :
+  block.kind === 'challenge-lab' ? <div class="learning-block"><ChallengeLab exercise={block} catalog={catalog} /></div> :
+  block.kind === 'troubleshooting' ? <div class="learning-block"><Troubleshooting exercise={block} catalog={catalog} /></div> :
+  <ReadingBlocks blocks={[block]} catalog={catalog} />)}

@@ -1,0 +1,15 @@
+---
+import type { Catalog, ChallengeLab } from '../../learning/model';
+import ReadingBlocks from './ReadingBlocks.astro';
+interface Props { exercise: ChallengeLab; catalog: Catalog }
+const { exercise, catalog } = Astro.props;
+---
+<section class="learning-exercise" aria-labelledby={exercise.id}>
+  <p class="learning-label">Challenge Lab</p><h3 id={exercise.id}>{exercise.title}</h3>
+  <p><strong>Goal:</strong> {exercise.goal}</p>
+  <p class="learning-label">Starting state</p><ReadingBlocks blocks={exercise.startingState} catalog={catalog} />
+  <p class="learning-label">Requirements</p><ul>{exercise.requirements.map(item => <li>{item}</li>)}</ul>
+  <p><strong>Expected end state:</strong> {exercise.expectedEndState}</p>
+  {exercise.hints?.length ? <details class="learning-disclosure"><summary>Hints</summary><ul>{exercise.hints.map(hint => <li>{hint}</li>)}</ul></details> : null}
+  <details class="learning-disclosure" data-challenge-solution><summary>Reveal solution</summary><div><ReadingBlocks blocks={exercise.solution} catalog={catalog} /></div></details>
+</section>

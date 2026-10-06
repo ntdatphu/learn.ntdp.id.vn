@@ -1,0 +1,19 @@
+---
+import type { Catalog, Troubleshooting } from '../../learning/model';
+import ReadingBlocks from './ReadingBlocks.astro';
+interface Props { exercise: Troubleshooting; catalog: Catalog }
+const { exercise, catalog } = Astro.props;
+---
+<section class="learning-exercise" aria-labelledby={exercise.id}>
+  <p class="learning-label">Troubleshooting Practice</p><h3 id={exercise.id}>{exercise.title}</h3>
+  <p><strong>Scenario:</strong> {exercise.scenario}</p>
+  <p class="learning-label">Observed symptoms</p><ul>{exercise.symptoms.map(symptom => <li>{symptom}</li>)}</ul>
+  <ReadingBlocks blocks={exercise.evidence} catalog={catalog} />
+  <p class="learning-learner-prompt">{exercise.learnerPrompt}</p>
+  <details class="learning-disclosure" data-troubleshooting-diagnosis><summary>Reveal diagnosis</summary><div>
+    <p><strong>Diagnosis:</strong> {exercise.diagnosis}</p>
+    <p class="learning-label">Explanation</p><ReadingBlocks blocks={exercise.explanation} catalog={catalog} />
+    <p class="learning-label">Corrective action</p><ReadingBlocks blocks={exercise.correctiveAction} catalog={catalog} />
+    <p class="learning-label">Verification</p><ReadingBlocks blocks={exercise.verification} catalog={catalog} />
+  </div></details>
+</section>

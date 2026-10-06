@@ -1,0 +1,9 @@
+---
+import type { Objective } from '../../learning/model';
+interface Props { objectives: readonly Objective[] }
+const { objectives } = Astro.props;
+---
+<section class="learning-objectives reading-measure" aria-labelledby="learning-objectives">
+  <h2 id="learning-objectives">Learning objectives</h2>
+  <ul>{objectives.map(objective => <li id={objective.id}>{objective.text}</li>)}</ul>
+</section>

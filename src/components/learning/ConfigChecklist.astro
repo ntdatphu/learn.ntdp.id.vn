@@ -1,0 +1,22 @@
+---
+import type { Catalog, ConfigChecklist } from '../../learning/model';
+import CliExample from './CliExample.astro';
+import { chapterHref } from '../../learning/resolve';
+interface Props { checklist: ConfigChecklist; catalog: Catalog; level?: 3 | 4 | 5 }
+const { checklist, catalog, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h3' | 'h4' | 'h5';
+const related = catalog.chapters.filter(chapter => checklist.relatedChapterIds?.includes(chapter.id) && chapter.publication === 'published');
+---
+<section class="learning-checklist" aria-labelledby={checklist.id}>
+  <p class="learning-label">Config Checklist · {checklist.category}</p>
+  <Heading id={checklist.id}>{checklist.title}</Heading>
+  {checklist.purpose && <p>{checklist.purpose}</p>}
+  <ol class="learning-steps">{checklist.steps.map(step => <li id={`${checklist.id}-${step.id}`}>
+    <p>{step.instruction}</p>
+    {step.commandIds?.length ? <CliExample example={{ kind: 'cli', id: `${checklist.id}-${step.id}-commands`, caption: 'Related commands', lines: step.commandIds.map(commandId => ({ kind: 'command', commandId })) }} catalog={catalog} /> : null}
+    {step.verification && <p class="learning-verification"><strong>Verify:</strong> {step.verification}</p>}
+  </li>)}</ol>
+  {checklist.verification?.length ? <div><p class="learning-label">Verification</p><ul>{checklist.verification.map(item => <li>{item}</li>)}</ul></div> : null}
+  {checklist.commonMistakes?.length ? <details class="learning-disclosure"><summary>Common mistakes</summary><ul>{checklist.commonMistakes.map(item => <li>{item}</li>)}</ul></details> : null}
+  {related.length > 0 && <p>Related chapters: {related.map(chapter => <a href={chapterHref(chapter, import.meta.env.BASE_URL)}>{chapter.title}</a>)}</p>}
+</section>

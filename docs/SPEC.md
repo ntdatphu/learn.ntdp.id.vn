@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.3; Learning Hub decisions confirmed through D-007 / P-25 · 2026-10-06 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.4; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -51,13 +51,25 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[PROPOSED]` **P-03** Required metadata per resource: title, type, description, author/source, source URL, license or permission, language, tags, date added, status (`draft` or `published`).
 - `[PROPOSED]` **P-04** A note can link to the document it explains (for example a book chapter).
 - `[PROPOSED]` **P-05** Embeds come only from an allowlist; everything else renders as a link card with a preview.
-- `[OPEN]` **Q-05** Which note features are wanted: callouts, highlights, tables, code blocks, math, diagrams, footnotes, images, collapsible sections?
+- `[CONFIRMED]` **Q-05 (partial) / D-009 / APPROVED P-26:** Notes, Key Topics, responsive tables, original diagrams, structured CLI, and native disclosures are approved learning primitives. Math, footnotes, other image/callout features remain undecided; no source images are approved.
 - `[OPEN]` **Q-06** Which video/site sources are on the embed allowlist (for example YouTube)?
 - `[CONFIRMED]` **Q-07 / D-006:** The hierarchy is **Subject -> Part/Chapter -> Material**. Learning Path is removed from the Learning Hub model.
 - `[CONFIRMED]` The only initial Subjects are `ccna` / **CCNA** and `linux-system` / **Linux System**. No Parts, Chapters, Lessons, Materials, PDFs, Notes, or sample resources are approved yet. Never invent curriculum.
 - `[CONFIRMED]` Home contains the Learning Hub identity, a **Search subjects** control, a **Subjects** heading, and two accessible Subject card links. Cards navigate to `/subjects/ccna/` and `/subjects/linux-system/`, respecting the configured base path.
 - `[CONFIRMED]` Subject search is entirely client-side and static, with no backend or network request. It trims surrounding whitespace, collapses repeated whitespace, matches case-insensitive substrings, and shows all Subjects for an empty query. An unmatched query displays exactly **No subjects found.** Both Subjects remain in generated HTML and visible if JavaScript fails; search may stay disabled until initialization.
 - `[CONFIRMED]` Each Subject page has the shared Learning Hub header, a way back to Subjects/home, its name as the page heading, and a **Chapters** section. Until real content is supplied, show exactly **Content coming soon.** and **Chapters and materials will appear here when they are ready.** No sample chapter cards, disabled fake controls, nonexistent content routes, or invented metadata.
+
+
+### 4.1 Learning content platform — D-009 / APPROVED P-26
+
+- `[CONFIRMED]` CCNA is produced **Part/Chapter at a time**. Commercial/private source material remains private; public learning content is independently authored. Source images, figures, tables, quiz questions/choices, and lab scenarios are not reused by default. No paragraph/page-level paraphrasing or translated source prose as a workaround. Technical facts, names, and commands remain correct. Track provenance privately during future production; see [public content rules](CONTENT_GUIDE.md).
+- `[CONFIRMED]` TASK-008 builds reusable, data-driven static Chapter infrastructure, **without populating curriculum** or reading the commercial source. Production Parts, Chapters, objectives, Key Topics, commands, and checklists remain empty. The public route list and both Subject empty states remain unchanged. Synthetic fixtures are clearly test-only and excluded from production output.
+- `[CONFIRMED]` Chapters support Subject/Part context, stable IDs/slugs, author-supplied title/intro, stable learning-objective IDs, ordered sections, shared Key Topic/checklist references, summary, and available published previous/next relationships. No unavailable navigation controls. Notes and Key Topics are first-class primitives; Key Topics have stable anchors and an explicit summary used by the derived **Key Topics to remember** review.
+- `[CONFIRMED]` Modern semantic tables offer explicit **cards** mode for row-wise mobile label/value groups and **scroll** mode for comparison matrices. Use readable type, restrained separators, and inner horizontal scrolling without page overflow. Original responsive SVG diagrams use figure/caption semantics, an accessible description, and generic geometry; no vendor icons or source topology reproduction.
+- `[CONFIRMED]` Structured CLI distinguishes prompt, command, output, comment, teaching emphasis, and verified result. Desktop/fine-pointer controls copy **one command text only**, never prompt/output; no Copy all. Copy controls are hidden/disabled on narrow or coarse-pointer presentations. Clipboard success is announced briefly; failure leaves manual text selection available.
+- `[CONFIRMED]` Config Checklists are one shared record with stable ID, title/category, ordered steps, command references, and optional purpose, verification, mistakes, and related Chapter IDs. The same record renders inline and later in a library. Walkthroughs compose short steps; Guided Labs distinguish goal/start, action, rationale, verification, and expected result. Challenge Labs have requirements, optional hints, and an initially hidden accessible solution. Troubleshooting supports symptoms/evidence, learner prompt, disclosed diagnosis, explanation, corrective action, and verification.
+- `[CONFIRMED]` Reading uses the D-007 identity, calm light-only editorial layout, approximately 44–48rem prose measure and 1.65–1.75 line-height. Wider tables/diagrams may escape that measure. Core content and native disclosures remain usable without JavaScript. Minimal client enhancement, local SVG/system fonts, no runtime content fetch or external visual assets.
+- `[CONFIRMED]` Future **Knowledge Check — Before/After**, question banks, scoring, objective breakdown, and **local-only progress** belong to TASK-009. TASK-008 provides integration slots without mock quizzes or persistence. The future CCNA Checklist Library at `/subjects/ccna/checklists/` belongs to TASK-010; it reuses the same checklist data and is not routed in TASK-008. Cross-device/account progress remains deferred.
 
 ## 5. Access
 
@@ -109,7 +121,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` Anchor the **Subjects** section on a very light `#f5f5f7` surface. Two substantial media-style cards sit side by side when space permits and stack on mobile, each with original decorative artwork, its real Subject name, an arrow, and a full-card native link. Do not add curriculum descriptions, counts, progress, badges, tags, or other invented metadata.
 - `[CONFIRMED]` CCNA artwork is original local SVG/CSS networking imagery: abstract nodes, connection paths, packet dots, or geometric device forms using blue/cyan and neutral tones. It is conceptual decoration, not a real topology or curriculum. No Cisco logo or decorative trademark branding.
 - `[CONFIRMED]` Linux System artwork is original local SVG/CSS systems imagery: abstract terminal rows, server forms, process grids, or filesystem branching using graphite/neutral tones with blue accents. No Tux, distro logos, external images, or copied illustrations. All artwork is decorative and hidden from assistive technology.
-- `[CONFIRMED]` Subject pages use an editorial composition with Back to Subjects, a large Subject H1, adjacent artwork on desktop and title-first stacking on mobile, followed by Chapters and the unchanged empty-state copy. No sample rows, disabled chapter controls, or nonexistent content routes. Future chapters should fit editorial lists; future reading should fit approximately 44–48rem width and 1.7 line-height, without adding unused pages/components now.
+- `[CONFIRMED]` Subject pages use an editorial composition with Back to Subjects, a large Subject H1, adjacent artwork on desktop and title-first stacking on mobile, followed by Chapters and the unchanged empty-state copy. No sample rows, disabled chapter controls, or nonexistent content routes. Future chapters should fit editorial lists; future reading should fit approximately 44–48rem width and 1.7 line-height, without adding public Chapter pages until real content is approved. D-009 subsequently approves reusable learning components and excluded QA fixtures.
 - `[CONFIRMED]` The restrained footer contains **NTDP Learning Hub**, **Learning, one subject at a time.**, **© <current year> Nguyễn Trần Đạt Phú**, and a small **ntdp.id.vn** link. Do not move this cross-link into the header.
 - `[CONFIRMED]` Use restrained card/link microinteractions around 180–300ms, with clear hover, focus-visible, and active states. Remove nonessential motion under `prefers-reduced-motion`. No continuous decorative motion is required.
 - `[CONFIRMED]` Local/system fonts only: no downloaded fonts, font packages, external font requests, or `@font-face`. The layout tolerates different system font metrics. D-007 preferred stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif`.
@@ -125,7 +137,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 12. Copyright and content policy
 
-- `[PROPOSED]` **P-11** Publish a document only when the Owner confirms the right to do so (own work, open license, or explicit permission). Otherwise link to the official source. Notes are in the Owner's own words, not copied passages. AI never adds third-party files. Unknown rights means `rights: unverified` and not published.
+- `[CONFIRMED]` **P-11 / D-009 / APPROVED P-26 (Learning Hub):** Commercial/private references stay outside the public repository. Publish independently authored content; do not reuse source expression, assets, questions/choices, or labs without explicit redistribution rights. Unknown rights remain unpublished. Private provenance and a content review gate are required during future production; see [CONTENT_GUIDE.md](CONTENT_GUIDE.md).
 
 ## 13. Repository professionalism
 
@@ -157,4 +169,4 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 18. Open questions, index
 
-Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 note features · Q-06 embed allowlist · Q-08 Apple sign-in · Q-09 personal-site repo name · Q-10 personal-site repo visibility · Q-11 personal-site stack · Q-12 personal-site design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and signing · Q-17 personal-site repository layout.
+Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 remaining note features (math, footnotes, other image/callout features) · Q-06 embed allowlist · Q-08 Apple sign-in · Q-09 personal-site repo name · Q-10 personal-site repo visibility · Q-11 personal-site stack · Q-12 personal-site design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and signing · Q-17 personal-site repository layout.

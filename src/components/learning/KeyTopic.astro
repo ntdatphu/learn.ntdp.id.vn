@@ -1,0 +1,12 @@
+---
+import Prose from './Prose.astro';
+import type { KeyTopic } from '../../learning/model';
+interface Props { topic: KeyTopic; level?: 3 | 4 | 5 }
+const { topic, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h3' | 'h4' | 'h5';
+---
+<section class="learning-key-topic" aria-labelledby={topic.id}>
+  <p class="learning-label">Key Topic</p>
+  <Heading id={topic.id}>{topic.title}</Heading>
+  <Prose content={topic} />
+</section>
