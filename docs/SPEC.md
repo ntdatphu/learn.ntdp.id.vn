@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.1 · 2026-10-06 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.2; Learning Hub decisions confirmed through D-006 · 2026-10-06 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -30,7 +30,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 ## 3. Scope
 
 ### 3.1 In scope now
-- `[CONFIRMED]` **Learning Hub** on its own subdomain, with **document storage first** (highest priority).
+- `[CONFIRMED]` Build the **Learning Hub before the personal site**. Its first screen is **Subject discovery**, rather than a document-storage-first interface. The eventual subdomain target is `learn.ntdp.id.vn`; the current milestone stages on the default GitHub Pages project URL.
 - `[CONFIRMED]` **Personal site** on `ntdp.id.vn`: Home/About page in English, about the Owner only. The current site keeps running until the Owner approves a switch.
 - `[CONFIRMED]` Deployed on GitHub Pages; domain registered at TenTen.
 
@@ -45,15 +45,19 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 4. Learning Hub content model
 
-- `[CONFIRMED]` **Documents:** PDF files shared for reading/download.
-- `[CONFIRMED]` **Notes:** self-written content in a Markdown-like format, with highlights and annotations in web style. The Owner writes them, or AI drafts from material the Owner supplies. In Phase 1 notes live in the repository; there is no online editor.
-- `[CONFIRMED]` **External resources:** download links, videos, other websites, each with a preview.
+- `[CONFIRMED]` **Documents (future content):** PDF files shared for reading/download. No PDFs or other materials are approved for the current milestone.
+- `[CONFIRMED]` **Notes (future content):** self-written content in a Markdown-like format, with highlights and annotations in web style. The Owner writes them, or AI drafts from material the Owner supplies. In Phase 1 notes live in the repository; there is no online editor.
+- `[CONFIRMED]` **External resources (future content):** download links, videos, other websites, each with a preview.
 - `[PROPOSED]` **P-03** Required metadata per resource: title, type, description, author/source, source URL, license or permission, language, tags, date added, status (`draft` or `published`).
 - `[PROPOSED]` **P-04** A note can link to the document it explains (for example a book chapter).
 - `[PROPOSED]` **P-05** Embeds come only from an allowlist; everything else renders as a link card with a preview.
 - `[OPEN]` **Q-05** Which note features are wanted: callouts, highlights, tables, code blocks, math, diagrams, footnotes, images, collapsible sections?
 - `[OPEN]` **Q-06** Which video/site sources are on the embed allowlist (for example YouTube)?
-- `[OPEN]` **Q-07** How should the hub be organized: categories, tags, collections, learning paths?
+- `[CONFIRMED]` **Q-07 / D-006:** The hierarchy is **Subject -> Part/Chapter -> Material**. Learning Path is removed from the Learning Hub model.
+- `[CONFIRMED]` The only initial Subjects are `ccna` / **CCNA** and `linux-system` / **Linux System**. No Parts, Chapters, Lessons, Materials, PDFs, Notes, or sample resources are approved yet. Never invent curriculum.
+- `[CONFIRMED]` Home contains the Learning Hub identity, a **Search subjects** control, a **Subjects** heading, and two accessible Subject card links. Cards navigate to `/subjects/ccna/` and `/subjects/linux-system/`, respecting the configured project base path.
+- `[CONFIRMED]` Subject search is entirely client-side and static, with no backend or network request. It trims surrounding whitespace, collapses repeated whitespace, matches case-insensitive substrings, and shows all Subjects for an empty query. An unmatched query displays exactly **No subjects found.** Both Subjects remain in generated HTML and visible if JavaScript fails; search may stay disabled until initialization.
+- `[CONFIRMED]` Each Subject page has the shared Learning Hub header, a way back to Subjects/home, its name as the page heading, and a **Chapters** section. Until real content is supplied, show exactly **Content coming soon.** and **Chapters and materials will appear here when they are ready.** No sample chapter cards, disabled fake controls, nonexistent content routes, or invented metadata.
 
 ## 5. Access
 
@@ -77,33 +81,36 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 8. Hosting, domain, repository
 
-- `[CONFIRMED]` Hosting: GitHub Pages. Domain: `ntdp.id.vn` at TenTen. The Learning Hub uses a subdomain of it.
+- `[CONFIRMED]` Hosting: GitHub Pages. Domain: `ntdp.id.vn` at TenTen. The eventual Learning Hub subdomain is `learn.ntdp.id.vn`. Current staging is `https://ntdatphu.github.io/learn.ntdp.id.vn/`; no custom domain, CNAME, or DNS changes belong to D-006.
 - `[CONFIRMED]` New repositories; Codex CLI runs on the Owner's computer.
-- `[PROPOSED]` **P-08** Build and test each site on a default `github.io` address first. A custom domain or subdomain is switched only after the Owner approves; the old site stays untouched until then; a rollback plan exists. The Owner does all DNS and GitHub settings.
+- `[CONFIRMED]` **P-08 / D-006 (Learning Hub staging):** Build and publish the Learning Hub at the default GitHub Pages project URL first. Use GitHub Actions with the official Astro Pages action and Pages `build_type: workflow`. Deployment runs on pushes to `main` and supports manual dispatch. The AI may configure Pages through existing authenticated tooling and merge verified work when repository protections permit. Custom-domain publication requires separate Owner approval; the personal site stays untouched.
 - `[PROPOSED]` **P-15** Two repositories, one per site (GitHub Pages serves one site per repository; verify against current documentation).
-- `[OPEN]` **Q-16** Subdomain name for the Learning Hub.
-- `[OPEN]` **Q-17** One repository per site (P-15) or another layout?
+- `[CONFIRMED]` **Q-16:** Learning Hub subdomain target: `learn.ntdp.id.vn` (not configured in this staging milestone).
+- `[CONFIRMED]` **Q-17 (Learning Hub):** The Learning Hub has its own repository, `ntdatphu/learn.ntdp.id.vn`. The personal-site repository layout remains open under P-15.
 - `[OPEN]` **Q-18** How do the two sites relate: cross-links and navigation, same look or different, shared components?
-- `[OPEN]` **Q-19** When is the personal site rebuilt: after the Learning Hub, or in parallel? (Owner priority so far: Learning Hub first.)
+- `[CONFIRMED]` **Q-19:** Build the Learning Hub before rebuilding the personal site.
 - `[OPEN]` **Q-01** Where is the current site and its repository (visibility, what is wrong with it, keep or archive)? The planner could not read the current site (bot protection) and the public GitHub profile shows a single repository.
 - `[OPEN]` **Q-04** Does the Owner have GitHub Pro or student benefits? What is the yearly budget limit for domain and services?
-- `[OPEN]` **Q-09** Names of the new repositories.
-- `[OPEN]` **Q-10** Public or private repository (depends on Q-04 and current GitHub rules).
-- `[OPEN]` **Q-15** Git identity for commits, commit signing yes/no, and whether PRs are opened by `gh` CLI or manually.
+- `[CONFIRMED]` **Q-09 (Learning Hub):** Repository: `ntdatphu/learn.ntdp.id.vn`. The personal-site repository name remains open.
+- `[CONFIRMED]` **Q-10 (Learning Hub):** The repository is public. Personal-site repository visibility remains open.
+- `[OPEN]` **Q-15** Git identity for commits and commit signing yes/no. For D-006, PRs are handled through existing authenticated GitHub tooling.
 
 ## 9. Technology
 
-- `[OPEN]` **Q-11** Technology stack. Criteria: works as a static site on GitHub Pages; few dependencies; strong Markdown support; good accessibility and performance; easy long-term maintenance; low cost. The planner presents 2–3 options with trade-offs; the Owner chooses.
+- `[CONFIRMED]` **Q-11 (Learning Hub):** Astro, static output, CSS, and minimal native client JavaScript. No backend, database, content API, or JavaScript framework integration is needed for D-006. Configure `site: https://ntdatphu.github.io` and `base: /learn.ntdp.id.vn`; all internal navigation must respect that base. The personal-site stack remains open.
 
 ## 10. Design
 
-- `[OPEN]` **Q-12** Visual direction: reference sites the Owner likes, light/dark mode, typography, colors, tone. The planner proposes written directions; the Owner chooses.
+- `[CONFIRMED]` **Q-12 (Learning Hub):** Simple, modern, professional, light-only, responsive, neutral, and content-first. Use one restrained visual system on Home and Subject pages, with clear hover, focus-visible, and active link treatments. No large decorative hero, marketing copy, distracting animation, or copied platform branding.
+- `[CONFIRMED]` Local/system fonts only: no downloaded fonts, font packages, external font requests, or `@font-face`. The layout tolerates different system font metrics. Preferred stack: `"Avenir Next", Avenir, "Century Gothic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif`.
+- `[CONFIRMED]` D-006 must work from approximately 320px through large desktop screens, without page-level horizontal overflow. Verify 320px, 768px, and 1280px, keyboard navigation, and 200% browser zoom where tooling permits. Use semantic headings, labeled search, appropriate search status announcements, practical contrast, usable touch targets, and meaningful Subject page titles.
+- `[OPEN]` Personal-site visual direction remains undecided.
 
 ## 11. Security and privacy
 
 - `[CONFIRMED]` Secrets never go into prompts or the repository. AI never touches credentials.
 - `[CONFIRMED]` Security and safety for all users matter.
-- `[PROPOSED]` **P-09** Phase 1 has no analytics, no tracking, no cookies, no third-party scripts or fonts.
+- `[CONFIRMED]` **P-09 / D-006 (Learning Hub):** No analytics, trackers, cookies, ads, third-party scripts, external fonts, CDN UI assets, external images, embeds, API calls, login, backend, or content persistence.
 - `[OPEN]` **Q-13** When to add privacy/terms pages (now, or when accounts arrive).
 
 ## 12. Copyright and content policy
@@ -123,8 +130,8 @@ This file is the **single source of truth** for what is being built. AI agents i
 ## 15. Delivery process
 
 - `[CONFIRMED]` ChatGPT plans and writes Codex prompts; Codex implements; the Owner reviews and decides.
-- `[CONFIRMED]` AI does not act outside approved scope, does not take "good" actions on its own, and asks when unsure.
-- `[CONFIRMED]` Codex automates coding, commits and pushes (to feature branches). The Owner merges.
+- `[CONFIRMED]` The Owner decides product scope, content, and visible behavior. The AI owns technical execution within that scope under the current `AGENTS.md` and asks only when a product/content/behavior decision is required.
+- `[CONFIRMED]` Codex automates coding, checks, commits, feature-branch pushes, PR handling, and deployment. For D-006, it may merge once acceptance criteria are satisfied and repository protections permit; it must not bypass protections.
 - `[CONFIRMED]` Reports to the Owner are in plain language (Vietnamese). Detailed rules: `AGENTS.md`.
 
 ## 16. Roadmap
@@ -134,10 +141,10 @@ This file is the **single source of truth** for what is being built. AI agents i
 ## 17. Suggestion parking lot (NOT approved: do not implement)
 
 - Resume reading in the browser without an account (stored on that device only).
-- Search inside the Learning Hub.
+- Search beyond Subject names inside Learning Hub content (Subject-name search is already confirmed).
 - Privacy, terms and cookie pages; account deletion (when accounts exist).
 - Online editor with roles (owner, editor, reader).
 
 ## 18. Open questions, index
 
-Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 note features · Q-06 embed allowlist · Q-07 hub organization · Q-08 Apple sign-in · Q-09 repo name · Q-10 repo visibility · Q-11 stack · Q-12 design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and PR method · Q-16 subdomain name · Q-17 repository layout · Q-18 relation between the two sites · Q-19 personal-site timing.
+Q-01 current site and repo · Q-02 Home sections · Q-03 public personal details · Q-04 student benefits and budget · Q-05 note features · Q-06 embed allowlist · Q-08 Apple sign-in · Q-09 personal-site repo name · Q-10 personal-site repo visibility · Q-11 personal-site stack · Q-12 personal-site design · Q-13 legal pages timing · Q-14 licenses · Q-15 git identity and signing · Q-17 personal-site repository layout · Q-18 relation between the two sites.

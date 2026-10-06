@@ -1,39 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SubjectCard from '../components/SubjectCard.astro';
 import { subjects } from '../data/subjects.js';
 ---
 
 <BaseLayout title="Learning Hub">
-  <header class="site-header">
-    <div class="page-width header-content">
-      <h1>Learning Hub</h1>
-      <div class="subject-search" role="search">
-        <label for="subject-search">Search subjects</label>
-        <input
-          id="subject-search"
-          type="search"
-          aria-controls="subject-list"
-          autocomplete="off"
-          disabled
-        />
-      </div>
+  <div slot="header" class="subject-search" role="search">
+    <label for="subject-search">Search subjects</label>
+    <div class="search-field">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.75" />
+        <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+      </svg>
+      <input
+        id="subject-search"
+        type="search"
+        aria-controls="subject-list"
+        autocomplete="off"
+        disabled
+      />
     </div>
-  </header>
+  </div>
 
-  <main class="page-width" aria-labelledby="subjects-heading">
-    <h2 id="subjects-heading">Subjects</h2>
+  <main id="main-content" class="page-width" aria-labelledby="subjects-heading" tabindex="-1">
+    <h1 id="subjects-heading">Subjects</h1>
     <ul id="subject-list" class="subject-list">
-      {
-        subjects.map((subject) => (
-          <li
-            class="subject"
-            data-subject-id={subject.id}
-            data-subject-name={subject.name}
-          >
-            <h3>{subject.name}</h3>
-          </li>
-        ))
-      }
+      {subjects.map((subject) => <SubjectCard subject={subject} />)}
     </ul>
     <p id="search-status" class="search-status" role="status" aria-live="polite" aria-atomic="true"></p>
   </main>
@@ -78,100 +70,3 @@ import { subjects } from '../data/subjects.js';
     searchInput.disabled = false;
   }
 </script>
-
-<style>
-  .page-width {
-    width: min(calc(100% - 2rem), 68rem);
-    margin-inline: auto;
-  }
-
-  .site-header {
-    background: #fff;
-    border-bottom: 1px solid #e0e5ec;
-  }
-
-  .header-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1.25rem 3rem;
-    padding-block: 1.5rem;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: clamp(1.35rem, 3vw, 1.65rem);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-  }
-
-  .subject-search {
-    flex: 1 1 24rem;
-    min-width: 0;
-    max-width: 36rem;
-    margin-inline-start: auto;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #4b5869;
-  }
-
-  input {
-    width: 100%;
-    min-width: 0;
-    padding: 0.8rem 1rem;
-    border: 1px solid #bac4d2;
-    border-radius: 0.5rem;
-    background: #f8fafc;
-    color: inherit;
-    font: inherit;
-  }
-
-  input:focus-visible {
-    outline: 2px solid #405b85;
-    outline-offset: 3px;
-  }
-
-  main {
-    padding-block: clamp(2rem, 5vw, 3rem);
-  }
-
-  h2 {
-    margin: 0 0 1.25rem;
-    font-size: clamp(1.5rem, 3vw, 1.9rem);
-    font-weight: 600;
-  }
-
-  .subject-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .subject {
-    min-height: 7rem;
-    padding: 1.5rem;
-    border: 1px solid #e0e5ec;
-    border-radius: 0.75rem;
-    background: #fff;
-    overflow-wrap: anywhere;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-
-  .search-status {
-    margin: 1rem 0 0;
-    color: #4b5869;
-  }
-</style>
