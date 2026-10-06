@@ -1,0 +1,54 @@
+---
+import type { Catalog, Chapter, ReadingBlock } from '../../learning/model';
+import type { Mode, QuestionBank } from '../../assessment/model';
+import ReadingBlocks from '../learning/ReadingBlocks.astro';
+import { validateQuestionBank } from '../../assessment/validate';
+import '../../styles/assessment.css';
+interface Props { mode: Mode; chapter: Chapter; bank: QuestionBank; catalog: Catalog }
+const { mode, chapter, bank, catalog } = Astro.props;
+validateQuestionBank(bank, chapter, catalog);
+const prefix = `check-${mode}-${chapter.id}`;
+const scope = (blocks: readonly ReadingBlock[], questionId: string) => blocks.map(block => 'id' in block ? { ...block, id: `${prefix}-${questionId}-${block.id}` } : block);
+const payload = { chapterId: chapter.id, objectives: chapter.objectives, bank: { ...bank, questions: bank.questions.map(({ context, explanation, distractorExplanations, reviewAnchor, ...q }) => ({ ...q, explanation: '' })) } };
+---
+<section class="knowledge-check reading-measure" data-knowledge-check data-mode={mode} data-assessment-chapter={chapter.id} aria-labelledby={prefix}>
+  <h2 id={prefix}>Knowledge Check — {mode === 'before' ? 'Before' : 'After'}</h2>
+  <p>{mode === 'before' ? 'Check your starting point before studying. Your results highlight objectives to pay attention to.' : 'Check what you learned. Review the explanations after submitting, then revisit any topics that need attention.'}</p>
+  <p data-check-unavailable>Knowledge checks require JavaScript. You can still read the chapter.</p>
+  <div data-check-enhanced hidden>
+    <p class="check-storage-notice" data-check-storage-notice></p>
+    <button type="button" class="learning-button" data-check-start>Start check</button>
+    <form data-check-form hidden novalidate>
+      <div data-check-questions>
+        {bank.questions.map(q => <fieldset data-question-id={q.id} hidden disabled aria-describedby={`${prefix}-${q.id}-instruction ${prefix}-${q.id}-error`}>
+          <legend id={`${prefix}-${q.id}-legend`}><span data-question-number></span>{q.prompt}</legend>
+          <p class="question-instruction" id={`${prefix}-${q.id}-instruction`}>{q.type === 'multiple-choice' ? 'Select all that apply.' : q.type === 'classification' ? 'Choose a category.' : 'Choose one answer.'}</p>
+          {q.context?.length ? <ReadingBlocks blocks={scope(q.context, q.id)} catalog={catalog} contextLabelledBy={`${prefix} ${prefix}-${q.id}-legend`} /> : null}
+          <div class="question-choices">{q.choices.map(choice => <label class="question-choice"><input type={q.type === 'multiple-choice' ? 'checkbox' : 'radio'} name={`${prefix}-${q.id}`} value={choice.id} /><span>{choice.label}</span></label>)}</div>
+          <p class="question-error" id={`${prefix}-${q.id}-error`} data-question-error hidden>Choose an answer before submitting.</p>
+          {mode === 'after' && <div class="question-feedback" data-question-feedback hidden>
+            <p class="question-verdict" data-question-verdict></p>
+            <p><strong>Correct answer:</strong> {q.choices.filter(c => q.correctChoiceIds.includes(c.id)).map(c => c.label).join('; ')}</p>
+            <p>{q.explanation}</p>
+            {q.distractorExplanations?.length ? <ul data-distractor-list>{q.distractorExplanations.map(d => <li data-distractor-id={d.choiceId} hidden>{d.text}</li>)}</ul> : null}
+            {q.reviewAnchor && <a class="check-review-link" href={`#${q.reviewAnchor}`}>Review this topic</a>}
+          </div>}
+        </fieldset>)}
+      </div>
+      <button type="submit" class="learning-button" data-check-submit>Submit answers</button>
+      <p class="check-form-status" role="alert" data-check-error></p>
+    </form>
+    <section class="check-results" data-check-results hidden aria-labelledby={`${prefix} ${prefix}-results`}>
+      <h3 id={`${prefix}-results`}>Results</h3><p class="check-score" data-check-score></p>
+      <dl class="objective-results" data-check-objectives></dl>
+      {mode === 'before' && <div data-check-attention><h4>Objectives to pay attention to</h4><ul data-attention-list></ul></div>}
+      <button type="button" class="learning-button learning-button--secondary" data-check-retry>Try again</button>
+    </section>
+  </div>
+  <p class="check-announcement" role="status" aria-atomic="true" data-check-announcement></p>
+  <script type="application/json" data-assessment-config set:html={JSON.stringify(payload).replace(/</g, '\u003c')} />
+</section>
+<script>
+  import { initializeLearningChecks } from '../../assessment/client';
+  initializeLearningChecks();
+</script>

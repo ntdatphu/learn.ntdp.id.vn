@@ -1,6 +1,6 @@
 /** SYNTHETIC TEST FIXTURE ONLY. Never imported by production routes/catalogs. */
-import type { Catalog, Chapter, DiagramBlock } from '../../src/learning/model';
-import { validateCatalog } from '../../src/learning/validate';
+import type { Catalog, Chapter, DiagramBlock } from '../../src/learning/model.ts';
+import { validateCatalog } from '../../src/learning/validate.ts';
 const prose = (text: string) => ({ kind: 'prose' as const, paragraphs: [text] });
 const diagram: DiagramBlock = {
   kind: 'diagram', id: 'fixture-diagram', caption: 'Original abstract geometry — test-only figure',

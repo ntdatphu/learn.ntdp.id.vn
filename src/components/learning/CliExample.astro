@@ -1,12 +1,12 @@
 ---
 import type { Catalog, CliExample } from '../../learning/model';
 import { requireRecord } from '../../learning/resolve';
-interface Props { example: CliExample; catalog: Catalog }
-const { example, catalog } = Astro.props;
+interface Props { example: CliExample; catalog: Catalog; contextLabelledBy?: string }
+const { example, catalog, contextLabelledBy } = Astro.props;
 ---
 <figure class="learning-cli" id={example.id} data-cli-example>
   <figcaption id={`${example.id}-caption`}>{example.caption}</figcaption>
-  <div class="cli-scroll" tabindex="0" role="region" aria-labelledby={`${example.id}-caption`}>
+  <div class="cli-scroll" tabindex="0" role="region" aria-labelledby={[contextLabelledBy, `${example.id}-caption`].filter(Boolean).join(' ')}>
     {example.lines.map(line => line.kind === 'command' ? (() => {
       const command = requireRecord(catalog.commands, line.commandId);
       return <div class:list={['cli-line', 'cli-line--command', { 'cli-line--highlight': command.highlight }]}>

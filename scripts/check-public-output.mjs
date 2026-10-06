@@ -15,7 +15,7 @@ for (const path of files) {
   assert(!/fixture|\.pdf$|checklists\/|chapters\/|quiz\//i.test(path), `Unexpected public file: ${path}`);
   if (/\.(html|css|js)$/.test(path)) {
     const text = await readFile(new URL(path, output), 'utf8');
-    assert(!/SYNTHETIC TEST FIXTURE|fixture-reading|qa-tool|data-cli-copy/.test(text), `Test/learning fixture leaked: ${path}`);
+    assert(!/SYNTHETIC[^<]*FIXTURE|fixture-reading|qa-tool|data-cli-copy|data-knowledge-check/.test(text), `Test/learning fixture leaked: ${path}`);
     assert(!/https?:\/\//.test(text.replace(/https:\/\/ntdp\.id\.vn\//g, '').replace(/http:\/\/www\.w3\.org\/2000\/svg/g, '')), `Unexpected external runtime URL: ${path}`);
     assert(!/@font-face/.test(text), 'External/downloaded font detected');
   }

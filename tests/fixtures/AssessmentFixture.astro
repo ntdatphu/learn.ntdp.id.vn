@@ -1,0 +1,15 @@
+---
+import ChapterLayout from '../../src/layouts/ChapterLayout.astro';
+import KnowledgeCheck from '../../src/components/assessment/KnowledgeCheck.astro';
+import ChapterProgress from '../../src/components/assessment/ChapterProgress.astro';
+import { fixtureChapter, fixtureCatalog } from './chapter';
+import { assessmentFixtureBank } from './assessment';
+interface Props { allTypes?: boolean }
+const bank = Astro.props.allTypes ? { ...assessmentFixtureBank, version: 2, afterCount: 36 } : assessmentFixtureBank;
+---
+<ChapterLayout chapter={fixtureChapter} catalog={fixtureCatalog}>
+  <p slot="notice" class="fixture-notice">SYNTHETIC ASSESSMENT TEST FIXTURE — NOT PUBLISHED</p>
+  <KnowledgeCheck slot="knowledge-check-before" mode="before" chapter={fixtureChapter} bank={bank} catalog={fixtureCatalog} />
+  <Fragment slot="knowledge-check-after"><KnowledgeCheck mode="after" chapter={fixtureChapter} bank={bank} catalog={fixtureCatalog} /><ChapterProgress chapterId={fixtureChapter.id} /></Fragment>
+</ChapterLayout>
+<style>.fixture-notice { max-width:46rem; margin:0 auto 2rem; padding:1rem; border:1px dashed #526f92; color:#385477; font-size:.8125rem; }</style>

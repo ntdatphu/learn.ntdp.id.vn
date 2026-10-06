@@ -1,6 +1,6 @@
 # Project Specification: ntdp.id.vn (personal site) and its Learning Hub
 
-**Status:** DRAFT v0.4; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
+**Status:** DRAFT v0.5; Learning Hub decisions confirmed through D-009 / APPROVED P-26 · 2026-10-07 · **Owner:** Nguyễn Trần Đạt Phú (@ntdatphu)
 
 This file is the **single source of truth** for what is being built. AI agents implement only what is tagged `[CONFIRMED]`.
 
@@ -69,7 +69,16 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` Structured CLI distinguishes prompt, command, output, comment, teaching emphasis, and verified result. Desktop/fine-pointer controls copy **one command text only**, never prompt/output; no Copy all. Copy controls are hidden/disabled on narrow or coarse-pointer presentations. Clipboard success is announced briefly; failure leaves manual text selection available.
 - `[CONFIRMED]` Config Checklists are one shared record with stable ID, title/category, ordered steps, command references, and optional purpose, verification, mistakes, and related Chapter IDs. The same record renders inline and later in a library. Walkthroughs compose short steps; Guided Labs distinguish goal/start, action, rationale, verification, and expected result. Challenge Labs have requirements, optional hints, and an initially hidden accessible solution. Troubleshooting supports symptoms/evidence, learner prompt, disclosed diagnosis, explanation, corrective action, and verification.
 - `[CONFIRMED]` Reading uses the D-007 identity, calm light-only editorial layout, approximately 44–48rem prose measure and 1.65–1.75 line-height. Wider tables/diagrams may escape that measure. Core content and native disclosures remain usable without JavaScript. Minimal client enhancement, local SVG/system fonts, no runtime content fetch or external visual assets.
-- `[CONFIRMED]` Future **Knowledge Check — Before/After**, question banks, scoring, objective breakdown, and **local-only progress** belong to TASK-009. TASK-008 provides integration slots without mock quizzes or persistence. The future CCNA Checklist Library at `/subjects/ccna/checklists/` belongs to TASK-010; it reuses the same checklist data and is not routed in TASK-008. Cross-device/account progress remains deferred.
+- `[CONFIRMED]` **TASK-009:** Reusable **Knowledge Check — Before/After**, question banks, scoring, objective breakdown, and **local-only progress** are implemented as infrastructure with non-public synthetic fixtures. No real question bank or public assessment exists before the content pilot. The future CCNA Checklist Library at `/subjects/ccna/checklists/` belongs to TASK-010; it reuses the same checklist data and is not routed in TASK-008. Cross-device/account progress remains deferred.
+
+
+### 4.2 Assessment and local progress — TASK-009
+
+- `[CONFIRMED]` Future flow: Chapter intro → Knowledge Check — Before → objectives → content/labs/review → Knowledge Check — After. Both checks cover the same stable objectives; balanced objective pools shuffle questions and redistribute sparse pools. Post normally uses different IDs from the corresponding Pre and retry prefers unused/least-recently-used IDs where possible.
+- `[CONFIRMED]` Question types include single choice, multiple choice, true/false, classification, CLI/output interpretation, configuration selection, troubleshooting, and topology/concept reasoning. Native controls; no drag/drop/matching/complex graphical interactions. Questions, choices, scenarios, and explanations must be independently authored; no source reuse or translation.
+- `[CONFIRMED]` Scoring is deterministic: 1 for a correct answer, 0 otherwise; multiple choice requires the exact set, without partial or negative credit. Results show raw score, percentage, and objective breakdown. Before highlights objectives needing attention without detailed explanations. After shows correct/incorrect text, correct answer, authored explanations/distractor guidance, and valid review links. Improvement is percentage-point difference, not relative growth.
+- `[CONFIRMED]` Progress stays only in this browser/device; nothing is transmitted to NTDP or third parties. Versioned scoped storage supports first/latest Pre, latest/best and bounded Post attempts, objective results, question IDs, and study timestamps. Malformed/denied storage must not break reading or checks. Reset requires deliberate confirmation and removes only relevant Learning Hub data, never unrelated browser storage. No person/account/analytics identifiers, accounts, backend, or cloud sync.
+- `[CONFIRMED]` No XP/streaks/badges/ranks/leaderboards/achievements. Core learning content stays usable without JavaScript; assessment unavailability is announced accessibly. Privacy copy: **Progress is stored only in this browser/device. Nothing is sent to NTDP or third parties.** No new Privacy page in TASK-009.
 
 ## 5. Access
 
@@ -132,7 +141,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 - `[CONFIRMED]` Secrets never go into prompts or the repository. AI never touches credentials.
 - `[CONFIRMED]` Security and safety for all users matter.
-- `[CONFIRMED]` **P-09 / D-006 (Learning Hub):** No analytics, trackers, cookies, ads, third-party scripts, external fonts, CDN UI assets, external images, embeds, API calls, login, backend, or content persistence.
+- `[CONFIRMED]` **P-09 / D-006 (Learning Hub):** No analytics, trackers, cookies, ads, third-party scripts, external fonts, CDN UI assets, external images, embeds, API calls, login, backend, or server-side content persistence. TASK-009 separately approves only local-browser assessment/progress storage as described above.
 - `[OPEN]` **Q-13** When to add privacy/terms pages (now, or when accounts arrive).
 
 ## 12. Copyright and content policy
@@ -162,7 +171,7 @@ This file is the **single source of truth** for what is being built. AI agents i
 
 ## 17. Suggestion parking lot (NOT approved: do not implement)
 
-- Resume reading in the browser without an account (stored on that device only).
+- Resume reading position in the browser without an account (assessment/progress storage is confirmed separately in TASK-009).
 - Search beyond Subject names inside Learning Hub content (Subject-name search is already confirmed).
 - Privacy, terms and cookie pages; account deletion (when accounts exist).
 - Online editor with roles (owner, editor, reader).
