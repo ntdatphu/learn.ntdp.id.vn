@@ -1,11 +1,10 @@
-# Learning UI contract - visual acceptance candidate
+# Learning UI contract
 
-D-010 / APPROVED P-27 defines the direction below. TASK-011 proposes its rendered
-expression in **three local-only specimens**. Visual acceptance is required before
-broad implementation. This document does not approve publication of the prototype,
-change the public CCNA experience, or authorize modifications to Draft PR #12.
-Owner-approved TASK-011 Visual Revision 2 refines discovery, focus precision and
-canvas-bound contextual controls below. The rendered pack still awaits acceptance.
+D-010 / APPROVED P-27 defines the direction below. TASK-011 established its rendered
+expression in **three local-only specimens**. The Owner accepted Visual Revision 2
+on 2026-10-07, so this document is the approved visual baseline for subsequent
+Learning Hub implementation. This does not publish the prototype, change the public
+CCNA experience by itself, or authorize merging Draft PR #12.
 
 ## Editorial + technical
 
