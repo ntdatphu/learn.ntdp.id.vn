@@ -1,0 +1,7 @@
+---
+interface Props {
+  intent: 'focus' | 'attention' | 'change' | 'warning' | 'success' | 'interface' | 'value';
+}
+const { intent } = Astro.props;
+---
+<span class="ux-emphasis" data-intent={intent}><slot /></span>

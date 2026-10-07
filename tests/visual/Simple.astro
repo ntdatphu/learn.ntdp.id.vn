@@ -1,0 +1,12 @@
+---
+import Layout from './Layout.astro';
+import Topology from './Topology.astro';
+import { simple } from './topologies';
+---
+<Layout title="Simple topology" specimen="simple">
+  <article class="ux-topology-page">
+    <header><p class="ux-kicker">Specimen 02 · Simple topology</p><h1>Labels that belong.</h1><p class="ux-deck">Devices below their icons. Interfaces beside their endpoints. No decorative numbering.</p><p class="ux-fixture-note">Synthetic geometry for visual review, not a networking lesson.</p></header>
+    <Topology topology={simple}/>
+    <aside class="ux-design-note"><h2>Read ownership before detail.</h2><p>Hover or keyboard-focus <strong>Gi1/0/7</strong> to connect the reference to its switch, endpoint and client path. On touch, tap the reference; Clear focus restores the default. The labels and connection details remain understandable without interaction.</p></aside>
+  </article>
+</Layout>

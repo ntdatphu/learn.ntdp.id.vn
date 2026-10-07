@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../src/layouts/BaseLayout.astro';
+import './visual.css';
+interface Props { title: string; specimen?: 'learning' | 'simple' | 'complex' }
+const { title, specimen } = Astro.props;
+---
+<BaseLayout title={`${title} | NTDP visual review`}>
+  <main id="main-content" class="ux-page" tabindex="-1">
+    <div class="ux-review-bar">
+      <a href="/">Visual acceptance pack</a>
+      <nav aria-label="Review specimens">
+        <a href="/learning/" aria-current={specimen === 'learning' ? 'page' : undefined}>01 Learning</a>
+        <a href="/simple/" aria-current={specimen === 'simple' ? 'page' : undefined}>02 Simple</a>
+        <a href="/complex/" aria-current={specimen === 'complex' ? 'page' : undefined}>03 Complex</a>
+      </nav>
+    </div>
+    <slot />
+  </main>
+</BaseLayout>

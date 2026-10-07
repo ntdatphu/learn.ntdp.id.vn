@@ -1,0 +1,47 @@
+---
+import Canvas from './Canvas.astro';
+import type { Topology } from './topologies';
+interface Props { topology: Topology }
+const { topology } = Astro.props;
+const isComplex = topology.id === 'complex';
+const id = topology.id;
+---
+<figure class="ux-topology" data-topology={id} aria-labelledby={`${id}-caption`}>
+  <figcaption id={`${id}-caption`}>{isComplex ? 'A denser topology, with the same visual grammar.' : 'Every interface has an owner.'}</figcaption>
+  <div class:list={['ux-topology-surface', { 'ux-has-controls': isComplex }]}>
+    <div class="ux-graph-frame"><Canvas topology={topology} prefix={`${id}-inline`} /></div>
+    {isComplex ? <div class="ux-controls-rail"><div class="ux-controls-anchor">
+      <div class="ux-floating-controls" role="group" aria-label="Diagram controls">
+        <button type="button" data-sequence-play disabled>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path class="ux-play-glyph" d="m6 3 10 7-10 7Z" fill="currentColor"/><path class="ux-pause-glyph" d="M6 3v14M14 3v14" stroke="currentColor" stroke-width="3"/></svg>
+          <span data-play-label>Play</span>
+        </button>
+        <button type="button" class="ux-desktop-secondary" data-sequence-step disabled>Step</button>
+        <button type="button" class="ux-desktop-secondary" data-sequence-reset disabled>Reset</button>
+        <button type="button" data-expand disabled><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M17 13v4h-4M7 17H3v-4" stroke="currentColor" stroke-width="1.5"/></svg><span>Expand</span></button>
+        <details class="ux-secondary-controls" data-secondary-controls>
+          <summary aria-label="More diagram controls"><svg width="18" height="16" viewBox="0 0 20 16" aria-hidden="true"><circle cx="4" cy="8" r="1.5"/><circle cx="10" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/></svg><span>More</span></summary>
+          <div><button type="button" data-sequence-step disabled>Step</button><button type="button" data-sequence-reset disabled>Reset</button></div>
+        </details>
+      </div>
+    </div></div> : <span class="ux-topology-context">One switch · two separate links</span>}
+  </div>
+  <p class="ux-path-status" role="status" aria-atomic="true" data-path-status>{isComplex ? 'No sequence running. Start at R-EDGE, follow SW-EDGE-01, then reach CLIENT-A.' : 'Hover or focus the interface reference to inspect its connection.'}</p>
+  <p class="ux-diagram-reference">{isComplex ? 'Follow the example path through ' : 'The switch-side interface '}<button type="button" class="ux-cross-reference" data-cross-reference disabled>{isComplex ? 'Gi1/0/8' : 'Gi1/0/7'}</button>{isComplex ? ' on SW-EDGE-01.' : ' belongs to SW-EDGE-01; eth0 belongs to CLIENT-A.'} <button type="button" class="ux-clear-focus" data-clear-focus hidden>Clear focus</button></p>
+  <p class="ux-diagram-legend"><span class="ux-legend-solid" aria-hidden="true"></span> Wired {isComplex && <><span class="ux-legend-dashed" aria-hidden="true"></span> Wireless</>} <span>Focus uses a stronger path and an explicit state label.</span></p>
+  <details class="ux-connection-details"><summary>Connection details</summary><ul>{topology.desktop.links.map(link => <li><strong>{topology.desktop.nodes.find(n=>n.id===link.from.owner)!.name}</strong> <code>{link.from.name}</code> → <strong>{topology.desktop.nodes.find(n=>n.id===link.to.owner)!.name}</strong> <code>{link.to.name}</code>{link.label && ` · ${link.label.text}`}</li>)}</ul></details>
+  <noscript><p>Interactions require JavaScript. Device and connection labels remain available above.</p></noscript>
+  {isComplex && <dialog class="ux-dialog" data-diagram-dialog aria-labelledby="expanded-title">
+    <header><div><p class="ux-section-label">Expanded topology</p><h2 id="expanded-title">Keep the labels readable.</h2></div><button type="button" data-close-dialog>Close ✕</button></header>
+    <p class="ux-pan-hint" id="pan-hint">Scroll or drag to pan. On touch screens, swipe inside the diagram. Use + / − to zoom.</p>
+    <div class="ux-expanded-surface">
+      <div class="ux-zoom-controls" role="group" aria-label="Diagram zoom"><button type="button" data-zoom-out aria-label="Zoom out">−</button><output data-zoom-value>100%</output><button type="button" data-zoom-in aria-label="Zoom in">+</button><button type="button" data-zoom-reset>Reset view</button></div>
+      <div class="ux-pan-viewport" tabindex="0" role="region" aria-label="Expanded diagram canvas" aria-describedby="pan-hint"><div class="ux-zoom-layer"><Canvas topology={topology} prefix={`${id}-expanded`} /></div></div>
+    </div>
+    <p class="ux-dialog-context">The same devices and connections; more room for detail. Escape closes this view.</p>
+  </dialog>}
+</figure>
+<script>
+  import { initializeTopologies } from './topology-client';
+  initializeTopologies();
+</script>
