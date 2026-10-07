@@ -75,3 +75,9 @@ test('caption IDs cannot collide with author objective IDs', () => {
 test('a command definition may recur in a CLI sequence without duplicate anchors', () => {
   validateCatalog(withBlocks([{ kind: 'cli', id: 'test-cli', caption: 'Neutral', lines: [{ kind: 'command', commandId: 'test-command' }, { kind: 'output', text: 'Before' }, { kind: 'command', commandId: 'test-command' }, { kind: 'output', text: 'After' }] }]));
 });
+
+
+test('standalone checklist IDs cannot collide with the skip-link main target', () => {
+  const catalog = makeCatalog();
+  assert.throws(() => validateCatalog({ ...catalog, checklists: [{ ...catalog.checklists[0], id: 'main-content' }] }), /reserved layout anchor/);
+});
