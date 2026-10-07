@@ -1,0 +1,34 @@
+---
+import Canvas from './Canvas.astro';
+import type { Topology } from './topologies';
+interface Props { topology: Topology }
+const { topology } = Astro.props;
+const isComplex = topology.id === 'complex';
+const id = topology.id;
+---
+<figure class="ux-topology" data-topology={id} aria-labelledby={`${id}-caption`}>
+  <figcaption id={`${id}-caption`}>{isComplex ? 'A denser topology, with the same visual grammar.' : 'Every interface has an owner.'}</figcaption>
+  <div class="ux-topology-toolbar">
+    {isComplex ? <div class="ux-sequence-controls" role="group" aria-label="Path sequence">
+      <button type="button" data-sequence-play disabled>Play</button><button type="button" data-sequence-step disabled>Step</button><button type="button" data-sequence-reset disabled>Reset</button>
+    </div> : <span class="ux-topology-context">One switch · two separate links</span>}
+    {isComplex && <button type="button" data-expand disabled>Expand diagram ↗</button>}
+  </div>
+  <p class="ux-path-status" role="status" aria-atomic="true" data-path-status>{isComplex ? 'No sequence running. Start at R-EDGE, follow SW-EDGE-01, then reach CLIENT-A.' : 'Hover or focus the interface reference to inspect its connection.'}</p>
+  <div class="ux-topology-surface"><Canvas topology={topology} prefix={`${id}-inline`} /></div>
+  <p class="ux-diagram-reference">{isComplex ? 'Follow the example path through ' : 'The switch-side interface '}<button type="button" class="ux-cross-reference" data-cross-reference disabled>{isComplex ? 'Gi1/0/8' : 'Gi1/0/7'}</button>{isComplex ? ' on SW-EDGE-01.' : ' belongs to SW-EDGE-01; eth0 belongs to CLIENT-A.'} <button type="button" class="ux-clear-focus" data-clear-focus hidden>Clear focus</button></p>
+  <p class="ux-diagram-legend"><span class="ux-legend-solid" aria-hidden="true"></span> Wired {isComplex && <><span class="ux-legend-dashed" aria-hidden="true"></span> Wireless</>} <span>Focus uses a stronger path and an explicit state label.</span></p>
+  <details class="ux-connection-details"><summary>Connection details</summary><ul>{topology.desktop.links.map(link => <li><strong>{topology.desktop.nodes.find(n=>n.id===link.from.owner)!.name}</strong> <code>{link.from.name}</code> → <strong>{topology.desktop.nodes.find(n=>n.id===link.to.owner)!.name}</strong> <code>{link.to.name}</code>{link.label && ` · ${link.label.text}`}</li>)}</ul></details>
+  <noscript><p>Interactions require JavaScript. Device and connection labels remain available above.</p></noscript>
+  {isComplex && <dialog class="ux-dialog" data-diagram-dialog aria-labelledby="expanded-title">
+    <header><div><p class="ux-section-label">Expanded topology</p><h2 id="expanded-title">Keep the labels readable.</h2></div><button type="button" data-close-dialog>Close ✕</button></header>
+    <div class="ux-zoom-controls" role="group" aria-label="Diagram zoom"><button type="button" data-zoom-out aria-label="Zoom out">−</button><output data-zoom-value>100%</output><button type="button" data-zoom-in aria-label="Zoom in">+</button><button type="button" data-zoom-reset>Reset view</button></div>
+    <p class="ux-pan-hint" id="pan-hint">Scroll or drag to pan. On touch screens, swipe inside the diagram. Use + / − to zoom.</p>
+    <div class="ux-pan-viewport" tabindex="0" role="region" aria-label="Expanded diagram canvas" aria-describedby="pan-hint"><div class="ux-zoom-layer"><Canvas topology={topology} prefix={`${id}-expanded`} /></div></div>
+    <p class="ux-dialog-context">The same devices and connections; more room for detail. Escape closes this view.</p>
+  </dialog>}
+</figure>
+<script>
+  import { initializeTopologies } from './topology-client';
+  initializeTopologies();
+</script>

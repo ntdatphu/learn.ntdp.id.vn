@@ -1,0 +1,21 @@
+---
+import DeviceIcon from './DeviceIcon.astro';
+import type { Topology } from './topologies';
+interface Props { topology: Topology; prefix: string }
+const { topology, prefix } = Astro.props;
+---
+{(['desktop', 'mobile'] as const).map(mode => {
+  const composition = topology[mode];
+  return <svg class={`ux-topology-svg ux-topology-${mode}`} viewBox={`0 0 ${composition.width} ${composition.height}`} role="img" aria-labelledby={`${prefix}-${mode}-title ${prefix}-${mode}-description`} xmlns="http://www.w3.org/2000/svg" data-composition={mode}>
+    <title id={`${prefix}-${mode}-title`}>{topology.id === 'simple' ? 'Two independent client connections' : 'Router, switches and wired/wireless clients'}</title>
+    <desc id={`${prefix}-${mode}-description`}>{topology.description}</desc>
+    <g class="ux-links">{composition.links.map(link => <path d={link.path} data-link-id={link.id} class:list={['ux-link', {'ux-link-wireless':link.wireless}]} />)}</g>
+    <g class="ux-link-labels">{composition.links.filter(link=>link.label).map(link => <text x={link.label!.x} y={link.label!.y} text-anchor="middle">{link.label!.text}</text>)}</g>
+    <g class="ux-devices">{composition.nodes.map(node => <g transform={`translate(${node.x},${node.y})`} data-node-id={node.id}>
+      <DeviceIcon kind={node.kind}/><text class="ux-device-name" y="44" text-anchor="middle">{node.name}</text>
+    </g>)}</g>
+    <g class="ux-endpoints">{composition.links.flatMap(link => [link.from,link.to].map(endpoint => <g class="ux-endpoint" data-owner={endpoint.owner} data-endpoint-link={link.id}>
+      <text x={endpoint.x} y={endpoint.y} text-anchor={endpoint.anchor ?? 'start'}>{endpoint.name}</text>
+    </g>))}</g>
+  </svg>;
+})}

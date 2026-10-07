@@ -1,0 +1,53 @@
+---
+import Layout from './Layout.astro';
+import Highlight from './Highlight.astro';
+import Cli from './Cli.astro';
+const sections = [
+  { id: 'understand', title: 'Read the evidence' },
+  { id: 'observe', title: 'Capture an observation' },
+  { id: 'reference', title: 'A reusable field reference' },
+  { id: 'practice', title: 'Put the evidence to work' },
+  { id: 'review', title: 'Review & carry forward' },
+];
+---
+<Layout title="Learning / CLI" specimen="learning">
+  <div class="ux-reading-grid">
+    <article class="ux-article">
+      <header class="ux-article-header">
+        <p class="ux-kicker">Specimen 01 · Learning / CLI</p>
+        <h1>Read the evidence.</h1>
+        <p class="ux-deck">A quieter reading flow. Distinct concepts, usable procedures, and command interactions right where you need them.</p>
+        <p class="ux-fixture-note">Synthetic Chapter slice for visual acceptance. This is not published learning content.</p>
+      </header>
+      <details class="ux-mobile-outline"><summary>Chapter outline <span>5 sections</span></summary><nav aria-label="Mobile Chapter outline"><ol>{sections.map(s => <li><a href={`#${s.id}`} data-outline-link={s.id}>{s.title}</a></li>)}</ol></nav></details>
+      <section class="ux-section" aria-labelledby="understand"><p class="ux-section-label">Understand</p><h2 id="understand">A state is an observation, not the whole story.</h2>
+        <p>Start with what the record actually shows. Separate <Highlight intent="value">configuration intent</Highlight> from observed state, then look for <Highlight intent="attention">evidence of change</Highlight>. One field should help you choose the next observation.</p>
+        <aside class="ux-key-topic" aria-labelledby="evidence-topic"><p class="ux-role-label">◇ Key Topic</p><h3 id="evidence-topic">Keep the question beside the evidence.</h3><p>“What changed?” is more useful than a visually impressive block of output. Emphasize the observation that answers the question, then return to the explanation.</p></aside>
+      </section>
+      <section class="ux-section" aria-labelledby="observe"><p class="ux-section-label">Observe</p><h2 id="observe">Capture an observation.</h2><p>The command stays high contrast; the prompt and supporting output stay quiet. <Highlight intent="interface">Gi1/0/7</Highlight> identifies the interface. The unchanged count is the evidence in this synthetic snapshot.</p><Cli />
+        <figure class="ux-evidence-table"><figcaption>A small comparison, with a clear reason for emphasis</figcaption><table><thead><tr><th scope="col">Observation</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody><tr><th scope="row">Recorded state</th><td>down</td><td><Highlight intent="success">up · expected</Highlight></td></tr><tr data-intent="attention"><th scope="row">Evidence: input errors</th><td>12</td><td><Highlight intent="attention">12 · unchanged</Highlight></td></tr></tbody></table></figure>
+      </section>
+      <section class="ux-section" aria-labelledby="reference"><p class="ux-section-label">Field reference</p><h2 id="reference">A procedure you can find again.</h2>
+        <section class="ux-checklist" aria-labelledby="visual-checklist"><header><p class="ux-role-label"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 6 2 2 3-4M11 6h10M3 13l2 2 3-4M11 13h10M3 20l2 2 3-4M11 20h10" stroke="currentColor" stroke-width="1.5"/></svg> Config checklist</p><h3 id="visual-checklist">Capture → compare → confirm</h3><p>A reusable reference, distinct from the surrounding explanation.</p></header>
+          <ol><li><div><strong>Name the observation.</strong><p>Identify the device, interface and expected result before reading the output.</p></div></li><li><div><strong>Keep the evidence together.</strong><p>Retain the starting value and a comparable follow-up, rather than a disconnected final total.</p><Cli id="reference-cli" compact /></div></li><li><div><strong>Confirm what the result supports.</strong><p class="ux-verified">✓ Expected fixture result: the recorded count did not increase.</p><p>State what is still unproven. The missing peer record remains a limitation.</p></div></li></ol>
+        </section>
+      </section>
+      <section class="ux-section ux-practice" aria-labelledby="practice"><header><p class="ux-section-label">Practice · evidence exercise</p><h2 id="practice">Put the evidence to work.</h2></header><p>Two snapshots show the same error total, but only one records the observation interval. Which record gives you a defensible comparison?</p><details><summary>Reveal the reasoning</summary><p>The interval and comparable conditions make the comparison meaningful. An unchanged total without context does not tell you how much activity occurred between observations.</p></details></section>
+      <section class="ux-section ux-summary" aria-labelledby="review"><p class="ux-section-label">Review</p><h2 id="review">Carry the question forward.</h2><p>Read with a purpose. Keep the observation, the evidence and the remaining uncertainty close together. Use the field reference when you need the procedure again.</p><a href="#visual-checklist">Return to Config checklist ↑</a></section>
+    </article>
+    <aside class="ux-outline"><nav aria-label="Chapter position"><p class="ux-outline-title">In this Chapter</p><ol>{sections.map(s => <li><a href={`#${s.id}`} data-outline-link={s.id}><span>{s.title}</span><span class="ux-current-label">Current</span></a></li>)}</ol><p class="ux-outline-caption">A reading guide,<br/>one section at a time.</p></nav></aside>
+  </div>
+</Layout>
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-outline-link]')];
+  const headings = [...document.querySelectorAll<HTMLElement>('.ux-section > h2, .ux-section > header > h2')];
+  let scheduled = false;
+  const update = () => {
+    let active = headings[0]?.id;
+    for (const heading of headings) if (heading.getBoundingClientRect().top <= 130) active = heading.id;
+    links.forEach(link => { if (link.dataset.outlineLink === active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current'); });
+    scheduled = false;
+  };
+  addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener('resize', update); update();
+</script>

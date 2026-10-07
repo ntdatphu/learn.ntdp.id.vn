@@ -1,0 +1,12 @@
+---
+import Layout from './Layout.astro';
+import Topology from './Topology.astro';
+import { complex } from './topologies';
+---
+<Layout title="Complex topology" specimen="complex">
+  <article class="ux-topology-page">
+    <header><p class="ux-kicker">Specimen 03 · Complex topology</p><h1>More connections. Same clarity.</h1><p class="ux-deck">A placement study with nine devices, owned interfaces, and a user-controlled path.</p><p class="ux-fixture-note">Synthetic topology; the sequence illustrates visual focus, not packet simulation.</p></header>
+    <Topology topology={complex}/>
+    <aside class="ux-design-note"><h2>Recompose, rather than shrink.</h2><p>Mobile uses a taller, independently placed version of the same graph. Trunk belongs to the link; interface names belong to endpoints. Expand provides larger labels, bounded zoom and native touch scrolling. This is a visual prototype, not the final TASK-012 diagram engine.</p></aside>
+  </article>
+</Layout>

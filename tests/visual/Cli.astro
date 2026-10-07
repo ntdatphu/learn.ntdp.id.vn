@@ -1,0 +1,36 @@
+---
+import Highlight from './Highlight.astro';
+interface Props { id?: string; compact?: boolean }
+const { id = 'observation-cli', compact = false } = Astro.props;
+const caption = compact ? 'Field reference — interface evidence' : 'Capture a local observation';
+const commands = compact ? ['show interfaces Gi1/0/7'] : ['show interfaces Gi1/0/7', 'show running-config interface Gi1/0/7'];
+---
+<figure class="ux-cli" id={id}>
+  <figcaption id={`${id}-caption`}>{caption} <span>Illustrative output</span></figcaption>
+  <div class="ux-cli-scroll" role="region" aria-labelledby={`${id}-caption`} tabindex="0">
+    {!compact && <p class="ux-cli-comment"># Synthetic evidence for visual review; not a live capture</p>}
+    <p class="ux-cli-step">Step 1 · Observe the selected interface</p>
+    {commands.map((command, index) => <div class="ux-command-row" data-command-row>
+      <code><span class="ux-prompt">SW-EDGE-01# </span><strong>{index === 0 ? 'show interfaces ' : 'show running-config interface '}<Highlight intent="interface">Gi1/0/7</Highlight></strong></code>
+      <button type="button" class="ux-copy" data-command-copy data-command={command} aria-label={`Copy command: ${command}`} hidden disabled>
+        <span class="ux-copy-normal" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="7" y="6" width="10" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 3H5a2 2 0 0 0-2 2v7" stroke="currentColor" stroke-width="1.5"/></svg></span>
+        <span class="ux-copy-result" aria-hidden="true">✓ Copied</span>
+      </button>
+      <span class="ux-sr-only" role="status" aria-atomic="true" data-copy-announcement></span>
+    </div>)}
+    <div class="ux-output">
+      <samp><Highlight intent="interface">Gi1/0/7</Highlight> is <Highlight intent="success">up</Highlight>, line protocol is up</samp>
+      <samp>Input errors <Highlight intent="attention">12 → 12</Highlight> <span class="ux-output-label">Evidence · no new errors</span></samp>
+      {!compact && <>
+        <samp>Recorded value <Highlight intent="change">unknown → auto</Highlight> <span class="ux-output-label">Changed observation</span></samp>
+        <samp class="ux-success-line">✓ Expected fixture state: local link is available</samp>
+        <samp class="ux-warning-line">Warning: peer evidence is missing from this snapshot.</samp>
+        <samp class="ux-omitted">… remaining counters omitted</samp>
+      </>}
+    </div>
+  </div>
+</figure>
+<script>
+  import { initializeCopy } from './copy';
+  initializeCopy();
+</script>
