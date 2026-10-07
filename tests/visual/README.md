@@ -12,9 +12,13 @@ npm run preview:visual
 
 Open `http://127.0.0.1:4323/`. Use 1440 × 900 and 390 × 844 for primary
 review, then check narrow screens, actual 200% browser zoom and reduced motion.
-In Learning, jump to Observe and Field reference. Focus/copy an individual command
-on a fine-pointer desktop. On the diagrams, focus the inline interface reference;
-on touch, tap it and clear focus. In Complex, try Step, Play/Pause, Reset and Expand.
+In Learning, jump to Observe and Field reference. Idle copy is visually hidden;
+hover the command row or Tab to its tight icon button on a fine-pointer desktop.
+On the diagrams, focus the inline interface reference;
+on touch, tap it and clear focus. In Complex, try Play/Pause and Expand inside the
+canvas. Desktop shows Step/Reset; mobile has them in More (Escape closes it).
+Scroll through the mobile diagram to test its sticky safe rail. Open Connection
+details for continued reading past the canvas and check that controls leave with it.
 In the expanded dialog, test Tab/Shift+Tab, Escape, zoom, scroll and drag/swipe pan.
 
 The generated source, output and cache live under ignored `.qa/visual/`. The

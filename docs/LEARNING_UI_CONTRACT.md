@@ -4,6 +4,8 @@ D-010 / APPROVED P-27 defines the direction below. TASK-011 proposes its rendere
 expression in **three local-only specimens**. Visual acceptance is required before
 broad implementation. This document does not approve publication of the prototype,
 change the public CCNA experience, or authorize modifications to Draft PR #12.
+Owner-approved TASK-011 Visual Revision 2 refines discovery, focus precision and
+canvas-bound contextual controls below. The rendered pack still awaits acceptance.
 
 ## Editorial + technical
 
@@ -40,13 +42,17 @@ and labeled header, not an additional saturated role. Review returns to open pro
 
 ## Command-local interaction
 
-A copy control belongs immediately after its command text in the same row. Idle
-shows a compact outline glyph. Fine-pointer hover or keyboard focus adds a subtle
-blue surface to the whole row; the glyph becomes stronger. Reserve the same inline
-width for feedback so the row does not reflow.
+A copy control belongs immediately after its command text in the same row. **Idle
+is visually empty:** the glyph/control has zero opacity and no pointer hit action.
+It remains keyboard and screen-reader discoverable. Fine-pointer row hover or
+keyboard focus reveals it and adds a subtle blue surface to the whole row. The
+actual icon button is 32×32px, with a tight 2px focus ring/2px offset. The row itself
+does not become the focus rectangle. Reserve an 88px inline slot for feedback so
+the command/output row does not reflow. Hover/pressed styling stays restrained.
 
 On success, **✓ Copied** replaces the glyph beside that exact command for **1250ms**.
-Copy only the command, never prompt/output or a block. Keep focus in place. A
+Copy only the command, never prompt/output or a block. The feedback button uses the
+reserved slot while the success label is visible; keep focus in place. A
 visually hidden polite live region in that row announces success; no visible bottom
 status, distant toast or page notification. Failure remains local with manual
 selection available. Narrow/coarse/no-JS contexts have no copy control. Use pointer
@@ -90,6 +96,27 @@ layout/router engine.
 
 ## Deliberate diagram interaction
 
+HTML controls belong **inside** the canvas, on one compact neutral surface: 94%
+white, soft border, 6px backdrop blur and a minimal shadow. Desktop reserves a
+72px header zone above all graph geometry for Play/Step/Reset/Expand. The simple
+diagram uses a quiet context label in its own reserved header, without fake actions.
+
+Mobile reserves a **64px side rail plus a 12px gap** for Play/Pause, Expand and
+native More disclosure (Step/Reset). The complex graph is independently recomposed
+to 280×1240; a 260px minimum rendering measure uses inner scrolling where needed
+on the narrowest screens. The controls never overlap that graphic region. More
+opens in the rail, preserves canvas dimensions and closes on Escape with focus
+returned to its summary. Primary touch targets are at least 44px.
+A 272px invisible sticky anchor reserves the disclosure's maximum extent; opening
+More near the lower boundary does not change the primary surface's position.
+
+The rail anchor uses native `position: sticky`, 72px plus top safe-area inset
+below the site header. Its containing rail spans **only the canvas**; it clamps at
+the lower boundary and leaves the viewport with the diagram. It is never globally
+fixed. No scroll listeners insert/remove/reposition controls, trigger playback or
+animate visibility. Top placement avoids the browser's bottom UI/safe area. Reduced
+motion removes reveal/path interpolation; sticky positioning remains ordinary scroll.
+
 No autoplay. **Play / Step / Reset** traverse the stated path. Play advances at
 1800ms per state and can pause; Step is immediate; Reset restores the neutral view.
 Reduced motion removes visual interpolation while retaining deliberate state changes.
@@ -102,7 +129,9 @@ clear it explicitly. Understanding never depends on hover or the enhancement.
 
 Complex **Expand diagram** uses a native modal dialog: close action, Escape,
 initial close-button focus, native background inertness plus a boundary Tab loop, return
-focus to the opener, and background scroll lock. The larger canvas supports bounded
+focus to the opener, and background scroll lock. Zoom controls float in a reserved
+64px header **inside the expanded canvas**, separate from its pan viewport, so
+scrolling cannot bring technical labels underneath them. The larger canvas supports bounded
 100-200% button zoom, scroll/keyboard/touch pan and fine-pointer drag pan. Gesture
 pinch and a final automatic collision/layout model are deferred to TASK-012; do not
 add a heavy diagram/animation library for this acceptance study.

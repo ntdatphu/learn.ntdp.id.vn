@@ -10,7 +10,8 @@ export function initializeTopologies() {
     let pinned = false, crossActive = false, step = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const play = root.querySelector<HTMLButtonElement>('[data-sequence-play]');
-    const next = root.querySelector<HTMLButtonElement>('[data-sequence-step]');
+    const next = [...root.querySelectorAll<HTMLButtonElement>('[data-sequence-step]')];
+    const menu = root.querySelector<HTMLDetailsElement>('[data-secondary-controls]');
     const initial = status.textContent!;
     const steps = ['Start at R-EDGE.', 'Follow the switch-owned Gi1/0/1 endpoint on SW-EDGE-01.', 'Follow Gi1/0/8 to CLIENT-A eth0.'];
     const render = () => {
@@ -27,9 +28,9 @@ export function initializeTopologies() {
       status.textContent = crossActive ? `Focus · SW-EDGE-01 ${complex ? 'Gi1/0/8' : 'Gi1/0/7'} → CLIENT-A eth0.` : step ? `Step ${step} of 3 · ${steps[step - 1]}` : initial;
       clear.hidden = !pinned;
       cross.classList.toggle('is-focused', crossActive);
-      if (next) next.disabled = step === 3;
+      next.forEach(button => button.disabled = step === 3);
     };
-    const stop = () => { clearTimeout(timer); timer = undefined; if (play) { play.textContent = 'Play'; play.setAttribute('aria-pressed','false'); } };
+    const stop = () => { clearTimeout(timer); timer = undefined; if (play) { play.querySelector('[data-play-label]')!.textContent = 'Play'; play.setAttribute('aria-pressed','false'); } };
     cross.disabled = false;
     cross.addEventListener('pointerenter', () => { if (fine.matches) { crossActive = true; render(); } });
     cross.addEventListener('pointerleave', () => { if (fine.matches && document.activeElement !== cross) { crossActive = false; render(); } });
@@ -40,13 +41,14 @@ export function initializeTopologies() {
     if (complex) {
       root.querySelectorAll<HTMLButtonElement>('[data-sequence-play],[data-sequence-step],[data-sequence-reset],[data-expand]').forEach(button => button.disabled = false);
       play!.setAttribute('aria-pressed','false');
-      next!.addEventListener('click', () => { stop(); pinned = crossActive = false; step = Math.min(3, step + 1); render(); });
-      root.querySelector('[data-sequence-reset]')!.addEventListener('click', () => { stop(); pinned = crossActive = false; step = 0; render(); });
+      next.forEach(button => button.addEventListener('click', () => { stop(); pinned = crossActive = false; step = Math.min(3, step + 1); render(); }));
+      root.querySelectorAll('[data-sequence-reset]').forEach(button => button.addEventListener('click', () => { stop(); pinned = crossActive = false; step = 0; render(); }));
+      menu!.addEventListener('keydown', event => { if (event.key === 'Escape' && menu!.open) { event.preventDefault(); menu!.open = false; menu!.querySelector('summary')!.focus(); } });
       play!.addEventListener('click', () => {
         if (timer) { stop(); return; }
         pinned = crossActive = false;
         step = step >= 3 ? 1 : step + 1; render();
-        play!.textContent = 'Pause'; play!.setAttribute('aria-pressed','true');
+        play!.querySelector('[data-play-label]')!.textContent = 'Pause'; play!.setAttribute('aria-pressed','true');
         const advance = () => { if (step < 3) { step++; render(); timer = setTimeout(advance, 1800); } else stop(); };
         timer = setTimeout(advance, 1800);
       });
@@ -57,7 +59,9 @@ export function initializeTopologies() {
       const layer = root.querySelector<HTMLElement>('.ux-zoom-layer')!;
       let zoom = 1, previousOverflow = '';
       const setZoom = (value: number) => {
-        zoom = Math.max(1, Math.min(2, value)); layer.style.width = `${zoom * 100}%`;
+        zoom = Math.max(1, Math.min(2, value));
+        const baseWidth = Math.max(viewport.clientWidth, parseFloat(getComputedStyle(layer).minWidth));
+        layer.style.width = `${baseWidth * zoom}px`;
         root.querySelector('[data-zoom-value]')!.textContent = `${Math.round(zoom * 100)}%`;
         root.querySelector<HTMLButtonElement>('[data-zoom-out]')!.disabled = zoom === 1;
         root.querySelector<HTMLButtonElement>('[data-zoom-in]')!.disabled = zoom === 2;
@@ -76,6 +80,7 @@ export function initializeTopologies() {
       root.querySelector('[data-zoom-out]')!.addEventListener('click', () => setZoom(zoom - .25));
       root.querySelector('[data-zoom-in]')!.addEventListener('click', () => setZoom(zoom + .25));
       root.querySelector('[data-zoom-reset]')!.addEventListener('click', () => { setZoom(1); viewport.scrollTo(0,0); });
+      addEventListener('resize', () => { if (dialog.open) setZoom(zoom); });
       let drag: {x:number;y:number;left:number;top:number} | undefined;
       viewport.addEventListener('pointerdown', event => { if (!fine.matches || event.button !== 0) return; drag = {x:event.clientX,y:event.clientY,left:viewport.scrollLeft,top:viewport.scrollTop};viewport.setPointerCapture(event.pointerId); });
       viewport.addEventListener('pointermove', event => { if (drag) { viewport.scrollLeft = drag.left + drag.x - event.clientX; viewport.scrollTop = drag.top + drag.y - event.clientY; } });

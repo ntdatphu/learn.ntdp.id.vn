@@ -14,6 +14,8 @@ export function initializeCopy() {
       if (button.disabled || !fine.matches || row.dataset.busy) return;
       row.dataset.busy = 'true';
       clearTimeout(timer);
+      row.classList.remove('is-copied', 'copy-failed');
+      button.removeAttribute('title');
       try {
         await navigator.clipboard.writeText(button.dataset.command!);
         row.classList.add('is-copied');
@@ -24,7 +26,7 @@ export function initializeCopy() {
         row.classList.add('copy-failed');
         status.textContent = 'Copy unavailable. Select the command text manually.';
         button.title = status.textContent;
-        timer = setTimeout(() => row.classList.remove('copy-failed'), 1250);
+        timer = setTimeout(() => { row.classList.remove('copy-failed'); status.textContent = ''; button.removeAttribute('title'); }, 1250);
       } finally { delete row.dataset.busy; }
     });
   });
