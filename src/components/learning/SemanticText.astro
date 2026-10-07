@@ -1,0 +1,6 @@
+---
+import type { LearningText } from '../../learning/model';
+interface Props { text: LearningText }
+const { text } = Astro.props;
+---
+{typeof text === 'string' ? text : text.map(segment => segment.intent ? <span class="learning-emphasis" data-intent={segment.intent}>{segment.text}</span> : segment.text)}

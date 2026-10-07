@@ -81,3 +81,28 @@ test('standalone checklist IDs cannot collide with the skip-link main target', (
   const catalog = makeCatalog();
   assert.throws(() => validateCatalog({ ...catalog, checklists: [{ ...catalog.checklists[0], id: 'main-content' }] }), /reserved layout anchor/);
 });
+
+
+test('semantic text remains backwards compatible and preserves command whitespace', () => {
+  const catalog = makeCatalog();
+  validateCatalog({ ...catalog, commands: [{ ...catalog.commands[0], display: [{ text: 'generic-', intent: 'interface' }, { text: 'test-command' }] }] });
+  validateCatalog(withBlocks([{ kind: 'prose', paragraphs: [[{ text: 'Evidence: ' }, { text: '<literal>', intent: 'evidence' }]] }]));
+});
+test('semantic command display cannot misrepresent copied text', () => {
+  const catalog = makeCatalog();
+  assert.throws(() => validateCatalog({ ...catalog, commands: [{ ...catalog.commands[0], display: [{ text: 'another-command' }] }] }), /match exact command text/);
+});
+test('unknown emphasis and invalid text segments fail before rendering', () => {
+  const invalid = [{ text: 'Neutral', intent: 'rainbow' }] as unknown as import('../src/learning/model.ts').LearningText;
+  assert.throws(() => validateCatalog(withBlocks([{ kind: 'prose', paragraphs: [invalid] }])), /Unknown emphasis/);
+  assert.throws(() => validateCatalog(withBlocks([{ kind: 'prose', paragraphs: [[]] }])), /Invalid paragraph segments/);
+});
+test('semantic table cells and rows are validated in both responsive modes', () => {
+  for (const mode of ['cards', 'scroll'] as const) {
+    validateCatalog(withBlocks([{ kind: 'table', id: 'semantic-table', caption: 'Synthetic', mode, columns: [{ id: 'name', label: 'Name' }], rows: [{ id: 'one', intent: 'change', cells: [[{ text: 'Changed: ' }, { text: 'a → b', intent: 'change' }]] }] }]));
+    validateCatalog(withBlocks([{ kind: 'table', id: 'semantic-table', caption: 'Synthetic', mode, columns: [{ id: 'name', label: 'Name' }], rows: [{ id: 'one', cells: [''] }] }]));
+  }
+});
+test('verified output cannot claim conflicting warning semantics', () => {
+  assert.throws(() => validateCatalog(withBlocks([{ kind: 'cli', id: 'semantic-cli', caption: 'Synthetic', lines: [{ kind: 'output', text: 'Conflict', verified: true, intent: 'warning' }] }])), /Verified output cannot conflict/);
+});

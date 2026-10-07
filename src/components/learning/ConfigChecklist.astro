@@ -9,20 +9,25 @@ const Heading = `h${level}` as 'h1' | 'h3' | 'h4' | 'h5';
 const related = catalog.chapters.filter(chapter => checklist.relatedChapterIds?.includes(chapter.id) && chapter.publication === 'published');
 ---
 <section class="learning-checklist" aria-labelledby={checklist.id}>
-  <p class="learning-label">Config Checklist · {checklistCategoryLabel(checklist, catalog)}</p>
-  <Heading id={checklist.id}>{checklist.title}</Heading>
-  {checklist.purpose && <p>{checklist.purpose}</p>}
-  <ol class="learning-steps">{checklist.steps.map(step => <li id={`${checklist.id}-${step.id}`}>
-    <p id={`${checklist.id}-${step.id}-instruction`}>{step.instruction}</p>
-    {step.commandIds?.length ? <CliExample example={{ kind: 'cli', id: `${checklist.id}-${step.id}-commands`, caption: 'Related commands', lines: step.commandIds.map(commandId => ({ kind: 'command', commandId })) }} catalog={catalog} contextLabelledBy={`${checklist.id}-${step.id}-instruction`} /> : null}
-    {step.verification && <p class="learning-verification"><strong>Verify:</strong> {step.verification}</p>}
-  </li>)}</ol>
-  {checklist.verification?.length ? <div><p class="learning-label">Verification</p><ul>{checklist.verification.map(item => <li>{item}</li>)}</ul></div> : null}
-  {checklist.commonMistakes?.length ? <details class="learning-disclosure"><summary>Common mistakes</summary><ul>{checklist.commonMistakes.map(item => <li>{item}</li>)}</ul></details> : null}
-  {related.length > 0 && <div class="learning-related-chapters">
-    <p class="learning-label">Related chapters</p>
-    <ul>
-      {related.map(chapter => <li><a href={chapterHref(chapter, import.meta.env.BASE_URL)}>{chapter.title}</a></li>)}
-    </ul>
-  </div>}
+  <header class="checklist-header">
+    <p class="checklist-role"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="m7 9 1.5 1.5L11 8m2 2h4M7 15h3m3 0h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Config checklist</p>
+    <p class="checklist-category">{checklistCategoryLabel(checklist, catalog)}</p>
+    <Heading id={checklist.id}>{checklist.title}</Heading>
+    {checklist.purpose && <p>{checklist.purpose}</p>}
+  </header>
+  <div class="checklist-body">
+    <ol class="learning-steps">{checklist.steps.map(step => <li id={`${checklist.id}-${step.id}`}>
+      <p id={`${checklist.id}-${step.id}-instruction`}>{step.instruction}</p>
+      {step.commandIds?.length ? <CliExample example={{ kind: 'cli', id: `${checklist.id}-${step.id}-commands`, caption: 'Related commands', lines: step.commandIds.map(commandId => ({ kind: 'command', commandId })) }} catalog={catalog} contextLabelledBy={`${checklist.id}-${step.id}-instruction`} /> : null}
+      {step.verification && <p class="learning-verification"><strong>Verify:</strong> {step.verification}</p>}
+    </li>)}</ol>
+    {checklist.verification?.length ? <div><p class="learning-label">Verification</p><ul>{checklist.verification.map(item => <li>{item}</li>)}</ul></div> : null}
+    {checklist.commonMistakes?.length ? <details class="learning-disclosure"><summary>Common mistakes</summary><ul>{checklist.commonMistakes.map(item => <li>{item}</li>)}</ul></details> : null}
+    {related.length > 0 && <div class="learning-related-chapters">
+      <p class="learning-label">Related chapters</p>
+      <ul>
+        {related.map(chapter => <li><a href={chapterHref(chapter, import.meta.env.BASE_URL)}>{chapter.title}</a></li>)}
+      </ul>
+    </div>}
+  </div>
 </section>

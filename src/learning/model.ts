@@ -1,22 +1,28 @@
 /** Author-owned content only. IDs are stable slugs, never list positions. */
 export type SubjectId = 'ccna' | 'linux-system';
+export type EmphasisIntent = 'focus' | 'interface' | 'value' | 'evidence' | 'change' | 'success' | 'warning' | 'error';
+export type OutputIntent = 'evidence' | 'change' | 'success' | 'warning' | 'error';
+/** Escaped text segments, never raw HTML. Existing plain strings remain valid. */
+export type LearningText = string | readonly { text: string; intent?: EmphasisIntent }[];
 export interface Prose {
-  paragraphs: readonly string[];
-  items?: readonly string[];
+  paragraphs: readonly LearningText[];
+  items?: readonly LearningText[];
 }
 export interface Objective { id: string; text: string }
 export interface Part { id: string; subjectId: SubjectId; title: string }
 export interface Command {
   id: string;
   text: string;
+  /** Optional semantic display must concatenate to exactly text, including whitespace. */
+  display?: LearningText;
   prompt?: string;
   copyable?: boolean;
   highlight?: boolean;
 }
 export type CliLine =
   | { kind: 'command'; commandId: string }
-  | { kind: 'output'; text: string; verified?: boolean }
-  | { kind: 'comment'; text: string };
+  | { kind: 'output'; text: LearningText; verified?: boolean; intent?: OutputIntent }
+  | { kind: 'comment' | 'omitted'; text: LearningText };
 export interface CliExample {
   kind: 'cli';
   id: string;
@@ -29,7 +35,7 @@ export interface TableBlock {
   caption: string;
   mode: 'cards' | 'scroll';
   columns: readonly { id: string; label: string }[];
-  rows: readonly { id: string; cells: readonly string[] }[];
+  rows: readonly { id: string; cells: readonly LearningText[]; intent?: OutputIntent }[];
 }
 export type NodeKind = 'client' | 'server' | 'switch' | 'router' | 'cloud';
 export interface DiagramNode {

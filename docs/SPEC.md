@@ -143,6 +143,13 @@ This file is the **single source of truth** for what is being built. AI agents i
 - `[CONFIRMED]` D-007 must work from approximately 320px through large desktop screens, without page-level horizontal overflow. Verify 320px, 375px, 768px, 1024px, 1280px, and 1920px; inspect screenshots and interaction states; verify keyboard navigation, reduced motion, and real 200% browser zoom where tooling permits. Use semantic headings, labeled search, appropriate search status announcements, practical contrast, usable touch targets, and meaningful Subject page titles.
 - `[OPEN]` Personal-site visual direction remains undecided.
 
+### 10.1 Approved learning primitives — P-27 / TASK-012
+
+- `[CONFIRMED]` The accepted TASK-011 Visual Revision 2 is the baseline for reusable learning components: open editorial prose, calm section/practice hierarchy, 12–16px surfaces, restrained semantic blue/amber/green/purple/red roles. Key Topics use quiet amber; Config checklists use a prominent purple leading rule, lavender labeled header and divided ordered body. Shared records/review behavior remain intact.
+- `[CONFIRMED]` CLI command copy is idle-hidden, revealed by fine-pointer hover or keyboard focus beside the exact command. A tight 32px button has a 2px focus ring. An 88px reserved slot shows **✓ Copied** for 1250ms without reflow/focus loss; feedback is row-local with a hidden polite announcement. Coarse/narrow/no-JS contexts have no copy controls; failure preserves manual selection. Escaped semantic text segments support selective inline/CLI/table emphasis, and table rows have explicit non-color-only state labels.
+- `[CONFIRMED]` Chapter layout derives a compact right sticky outline at 68rem and above; narrower layouts use a near-top native disclosure. Current position has a rule, stronger type, **Current** text and `aria-current`; native anchors account for the header and reduced motion. Scrolling never rewrites history. Production remains Home, two empty Subjects and the empty CCNA Checklist Library; all demonstrations are isolated synthetic fixtures.
+- `[CONFIRMED]` TASK-012 is held at an implementation PR review gate. Final topology interactions belong to TASK-013, scrollbar polish to TASK-014, and real Pilot retrofit to TASK-015. Draft PR #12 remains untouched.
+
 ## 11. Security and privacy
 
 - `[CONFIRMED]` Secrets never go into prompts or the repository. AI never touches credentials.
