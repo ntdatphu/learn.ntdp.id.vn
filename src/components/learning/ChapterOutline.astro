@@ -1,0 +1,12 @@
+---
+interface Props { items: readonly { id: string; title: string }[]; mobile?: boolean }
+const { items, mobile = false } = Astro.props;
+---
+<nav aria-label={mobile ? 'Chapter outline — compact' : 'Chapter outline'} class="chapter-outline">
+  {!mobile && <p class="chapter-outline-title">In this chapter</p>}
+  <ol>{items.map(item => <li><a href={`#${item.id}`} data-outline-link={item.id}>{item.title}<span class="chapter-current-label">Current</span></a></li>)}</ol>
+</nav>
+<script>
+  import { initializeChapterOutline } from '../../learning/chapter-outline';
+  initializeChapterOutline();
+</script>

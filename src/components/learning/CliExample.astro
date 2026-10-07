@@ -1,6 +1,8 @@
 ---
 import type { Catalog, CliExample } from '../../learning/model';
 import { requireRecord } from '../../learning/resolve';
+import { outputLabels } from '../../learning/emphasis';
+import SemanticText from './SemanticText.astro';
 interface Props { example: CliExample; catalog: Catalog; contextLabelledBy?: string }
 const { example, catalog, contextLabelledBy } = Astro.props;
 ---
@@ -9,49 +11,22 @@ const { example, catalog, contextLabelledBy } = Astro.props;
   <div class="cli-scroll" tabindex="0" role="region" aria-labelledby={[contextLabelledBy, `${example.id}-caption`].filter(Boolean).join(' ')}>
     {example.lines.map(line => line.kind === 'command' ? (() => {
       const command = requireRecord(catalog.commands, line.commandId);
-      return <div class:list={['cli-line', 'cli-line--command', { 'cli-line--highlight': command.highlight }]}>
-        <code><span class="cli-prompt">{command.prompt ? `${command.prompt} ` : ''}</span><span class="cli-command">{command.text}</span></code>
-        {command.copyable && <button class="cli-copy" type="button" data-cli-copy data-command={command.text} aria-label={`Copy command: ${command.text}`} hidden disabled>Copy</button>}
+      return <div class="cli-line cli-line--command" data-command-row>
+        <code><span class="cli-prompt">{command.prompt ? `${command.prompt} ` : ''}</span><strong class:list={['cli-command', { 'cli-command--highlight': command.highlight }]}><SemanticText text={command.display ?? command.text} /></strong></code>
+        {command.copyable && <span class="cli-copy-slot"><button class="cli-copy" type="button" data-cli-copy data-command={command.text} aria-label={`Copy command: ${command.text}`} hidden disabled>
+          <span class="cli-copy-normal" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="7" y="6" width="10" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M12 3H5a2 2 0 0 0-2 2v7" stroke="currentColor" stroke-width="1.5"/></svg></span>
+          <span class="cli-copy-result" aria-hidden="true">✓ Copied</span>
+          <span class="cli-copy-failure" aria-hidden="true">Unavailable</span>
+        </button></span>}
+        {command.copyable && <span class="learning-sr-only" role="status" aria-atomic="true" data-copy-announcement></span>}
       </div>;
-    })() : <div class:list={['cli-line', `cli-line--${line.kind}`, { 'cli-line--verified': line.kind === 'output' && line.verified }]}>
-      {line.kind === 'output' ? <samp>{line.text}</samp> : <code>{line.text}</code>}
-      {line.kind === 'output' && line.verified && <span class="cli-verified-label">Verified</span>}
+    })() : <div class:list={['cli-line', `cli-line--${line.kind}`]} data-intent={line.kind === 'output' ? (line.verified ? 'success' : line.intent) : undefined}>
+      {line.kind === 'output' ? <samp><SemanticText text={line.text} /></samp> : <code><SemanticText text={line.text} /></code>}
+      {line.kind === 'output' && (line.verified || line.intent) && <span class="cli-output-label">{line.verified ? 'Verified' : outputLabels[line.intent!]}</span>}
     </div>)}
   </div>
-  <p class="cli-status" role="status"></p>
 </figure>
 <script>
-  // Pointer capabilities and available width, never user-agent sniffing.
-  const desktop = window.matchMedia('(min-width: 48rem) and (hover: hover) and (pointer: fine)');
-  const clipboardAvailable = window.isSecureContext && typeof navigator.clipboard?.writeText === 'function';
-  document.querySelectorAll<HTMLElement>('[data-cli-example]').forEach(example => {
-    const status = example.querySelector<HTMLElement>('[role="status"]');
-    const buttons = example.querySelectorAll<HTMLButtonElement>('[data-cli-copy]');
-    const updateControls = () => buttons.forEach(button => {
-      button.hidden = !clipboardAvailable || !desktop.matches;
-      button.disabled = button.hidden;
-    });
-    updateControls();
-    desktop.addEventListener('change', updateControls);
-    let reset: ReturnType<typeof setTimeout>;
-    let operation = 0;
-    buttons.forEach(button => button.addEventListener('click', async () => {
-      if (button.disabled || !desktop.matches || button.dataset.busy) return;
-      button.dataset.busy = 'true';
-      clearTimeout(reset);
-      const current = ++operation;
-      buttons.forEach(control => { control.textContent = 'Copy'; });
-      try {
-        await navigator.clipboard.writeText(button.dataset.command ?? '');
-        if (current !== operation) return;
-        button.textContent = 'Copied';
-        if (status) status.textContent = 'Command copied.';
-        reset = setTimeout(() => { button.textContent = 'Copy'; if (status) status.textContent = ''; }, 2000);
-      } catch {
-        if (current !== operation) return;
-        if (status) status.textContent = 'Could not copy. Select the command text to copy it manually.';
-        button.textContent = 'Copy';
-      } finally { delete button.dataset.busy; }
-    }));
-  });
+  import { initializeCommandCopy } from '../../learning/command-copy';
+  initializeCommandCopy();
 </script>

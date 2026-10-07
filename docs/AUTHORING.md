@@ -1,8 +1,9 @@
 # Learning content authoring API
 
 TASK-008 provides presentation infrastructure, not curriculum. The production
-catalog (`src/learning/catalog.ts`) is empty; only Home and the two Subject pages
-are routable. Read [public content rules](CONTENT_GUIDE.md) before producing content.
+catalog (`src/learning/catalog.ts`) is empty; public routes remain Home, the two
+Subject pages, and the empty CCNA Checklist Library. Read
+[public content rules](CONTENT_GUIDE.md) before producing content.
 
 ## Data and publication
 
@@ -36,9 +37,9 @@ Section headings are H2, block headings H3, and exercise-step headings H4.
 | Block / record | Author-supplied fields and behavior |
 |---|---|
 | Note | `kind: 'note'`, optional `label`, `paragraphs`, optional `items`; supports multiple paragraphs in a quiet labeled aside. |
-| Key Topic | Shared record: `id`, `title`, `paragraphs`, optional `items`, explicit `summary`. Use `{ kind: 'key-topic', topicId }` in a section. The stronger blue treatment has a stable heading anchor. |
+| Key Topic | Shared record: `id`, `title`, `paragraphs`, optional `items`, explicit `summary`. Use `{ kind: 'key-topic', topicId }` in a section. The quiet amber surface/leading rule has an explicit Key Topic label and stable heading anchor. |
 | Key Topics review | `keyTopicsFor(chapter, catalog)` resolves the actual records in reading order. Review links and condensed text use record titles/summaries; there is no DOM scraping or duplicated review prose. |
-| Table | `kind: 'table'`, `id`, `caption`, explicit `mode`, `columns: [{id,label}]`, `rows: [{id,cells}]`. Each row must match the column count. |
+| Table | `kind: 'table'`, `id`, `caption`, explicit `mode`, `columns: [{id,label}]`, `rows: [{id,cells,intent?}]`. Each row must match the column count. |
 | Diagram | `kind: 'diagram'`, `id`, `caption`, `description`, view-box `width`/`height`, `nodes`, `links`. Generic geometry is rendered locally as responsive SVG. |
 | CLI | `kind: 'cli'`, `id`, `caption`, ordered `lines`. Command lines reference shared command IDs; outputs and comments contain their own text. |
 | Config Checklist | Shared record: `id`, `title`, `category`, ordered `steps`, optional `purpose`, `verification`, `commonMistakes`, `relatedChapterIds`. Use `{ kind: 'checklist', checklistId }`. |
@@ -74,32 +75,81 @@ original geometry only when a real authored diagram requires it.
 
 ## CLI and shared procedures
 
-A command record has `id`, `text`, optional `prompt`, `copyable`, and `highlight`.
+A command record has `id`, exact plain `text`, optional `prompt`, `copyable`,
+`highlight`, and `display`. `display` may use `LearningText` segments but must
+concatenate to **exactly** `text`, including whitespace; validation rejects a
+mismatch. Display emphasis never changes the copied command.
+
 A CLI line is one of:
 
 - `{kind: 'command', commandId}`
-- `{kind: 'output', text, verified?: true}`
-- `{kind: 'comment', text}`
+- `{kind: 'output', text, verified?: true, intent?: OutputIntent}`
+- `{kind: 'comment', text}` or `{kind: 'omitted', text}`
 
-Only mark output `verified` when the result really has been verified. The output
-includes a visible Verified label as well as restrained green styling. Highlighted
-commands use blue emphasis. Prompts, comments, and unverified output stay neutral.
-Long lines scroll inside the CLI region and remain selectable.
+Only mark output `verified` when the result really has been verified. It includes a
+visible **Verified** label and green treatment. Other output intents have explicit
+**Evidence**, **Changed**, **Success**, **Warning**, or **Error** labels. Verified
+output cannot have a conflicting intent. Prompts/comments/omitted text stay muted;
+commands are strong and ordinary output neutral. Omitted text is italic. Long lines
+scroll inside a labeled keyboard-focusable CLI region and remain selectable.
 
-Copy controls start hidden and disabled. They appear only with a secure, available
-Clipboard API and `(min-width: 48rem) and (hover: hover) and (pointer: fine)`.
-Each copies exactly its command record's text, never prompt/output or the whole
-example. Success shows **Copied** and announces **Command copied.** briefly.
-Failure announces **Could not copy. Select the command text to copy it manually.**
-There is no Copy all, user-agent detection, or deprecated clipboard fallback.
-Coarse pointers and narrow layouts have no copy controls, including when resized.
+Copy starts hidden/disabled and is enhanced only with a secure available Clipboard
+API and `(min-width: 48rem) and (hover: hover) and (pointer: fine)`. Idle has no visible
+icon. Row hover or keyboard focus reveals a 32px button immediately beside its
+command and a quiet blue row surface. The 2px focus ring surrounds only that button.
+An 88px inline slot reserves space for **✓ Copied** for **1250ms**, with no row reflow
+or focus loss. A hidden polite row-local status announces the exact command copied;
+there is no visible footer/toast. Failure briefly shows **Unavailable** in the same
+slot and announces **Copy unavailable. Select the command text manually.** Manual
+selection stays available. Narrow/coarse/no-JS/unavailable-Clipboard contexts have
+no control. No Copy all, user-agent detection, or deprecated fallback.
 
-Checklist steps reference shared command IDs instead of copying command strings.
-Each step has an instruction and optional verification guidance. Overall verification
-and common mistakes are optional; related Chapter links include only published
-records. TASK-010 can query the same `catalog.checklists` and render the same
-`ConfigChecklist` with a catalog. There are no completion controls or library route
-in TASK-008.
+Checklist steps reference shared command IDs. Inline and library detail use the
+same `ConfigChecklist` component/record: a purple leading rule, lavender header,
+original procedure glyph, explicit **Config checklist** identity and strong title,
+then a divided ordered body. Verification, common mistakes and a semantic list of
+published related Chapters remain authored once; no completion controls are added.
+
+## Semantic emphasis (P-27 / TASK-012)
+
+Existing plain strings remain valid. `LearningText` also accepts an ordered array
+of `{text, intent?}` segments in prose paragraphs/items, CLI output/comment/omitted
+lines, command display, and table cells. All segments are escaped text, never HTML.
+Supported intents are `focus`, `interface`, `value`, `evidence`, `change`, `success`,
+`warning`, and `error`; use them only to explain a specific teaching purpose.
+
+```ts
+paragraphs: [[
+  { text: 'Changed value: ' },
+  { text: 'unknown → auto', intent: 'change' },
+]]
+```
+
+Blue underlining denotes interaction/interface references, neutral bold treatment
+configuration values, amber evidence/change, green genuine success, and red actual
+warning/error. Font weight, underlines/rules and explicit authored wording accompany
+color. State the evidence/result/warning meaning in surrounding text rather than
+relying on hue. The same renderer supports individual table cells in both cards and
+scroll modes. An optional row `intent: OutputIntent` adds a leading rule/surface and
+a visible state label in both representations; it does not change column shape.
+`OutputIntent` is the small state subset: evidence/change/success/warning/error.
+Do not assign every block every role or introduce an IDE syntax palette.
+
+## Derived Chapter outline (P-27 / TASK-012)
+
+`ChapterLayout` derives native jump links from Learning objectives, authored section
+IDs/titles, the optional Key Topics review and Chapter Summary. No duplicated outline
+content is authored. At 68rem and above a compact right-side sticky outline leaves
+the reading column primary; below 68rem a near-top native **Chapter outline**
+disclosure replaces it. Both wrap long titles and work without JavaScript.
+
+Minimal native JS tracks the last heading at the reading threshold, coalesces
+scroll work with animation frames, and updates `aria-current="location"`, a leading
+rule, stronger type and visible **Current** text. It never rewrites hash/history on
+scroll. Clicking retains native anchors with 88px header-safe scroll margins;
+normal scroll may be smooth, reduced motion is immediate. Reading/anchors/native
+disclosures remain usable without enhancement. No topology interactions or custom
+scrollbar engine are implemented by this task.
 
 ## Future assessment integration
 
@@ -137,7 +187,8 @@ git diff --check
 ```
 
 Production `postbuild` runs `verify:public`: it currently enforces exactly Home and
-two empty-state Subject routes and rejects fixture strings, extra content routes,
+two empty-state Subject routes plus the empty CCNA Checklist Library. It rejects
+fixture strings, extra content routes,
 PDFs, external runtime URLs, or downloaded fonts. A later approved publication task
 must deliberately update that allowlist to the exact new real routes and retain the
 fixture/source exclusion checks. Never disable the guard merely to pass a build.

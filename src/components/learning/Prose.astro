@@ -1,9 +1,10 @@
 ---
+import SemanticText from './SemanticText.astro';
 import type { Prose } from '../../learning/model';
 interface Props { content: Prose }
 const { content } = Astro.props;
 ---
 <div class="learning-prose">
-  {content.paragraphs.map(paragraph => <p>{paragraph}</p>)}
-  {content.items?.length ? <ul>{content.items.map(item => <li>{item}</li>)}</ul> : null}
+  {content.paragraphs.map(paragraph => <p><SemanticText text={paragraph} /></p>)}
+  {content.items?.length ? <ul>{content.items.map(item => <li><SemanticText text={item} /></li>)}</ul> : null}
 </div>

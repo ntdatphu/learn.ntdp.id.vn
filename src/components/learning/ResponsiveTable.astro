@@ -1,4 +1,6 @@
 ---
+import SemanticText from './SemanticText.astro';
+import { outputLabels } from '../../learning/emphasis';
 import type { TableBlock } from '../../learning/model';
 interface Props { table: TableBlock; contextLabelledBy?: string }
 const { table, contextLabelledBy } = Astro.props;
@@ -10,10 +12,10 @@ const { table, contextLabelledBy } = Astro.props;
     <table>
       <caption class="learning-sr-only">{table.caption}</caption>
       <thead><tr>{table.columns.map(column => <th scope="col">{column.label}</th>)}</tr></thead>
-      <tbody>{table.rows.map(row => <tr>{row.cells.map((cell, index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody>
+      <tbody>{table.rows.map(row => <tr data-intent={row.intent}>{row.cells.map((cell, index) => index === 0 ? <th scope="row"><SemanticText text={cell} />{row.intent && <span class="table-intent-label">{outputLabels[row.intent]}</span>}</th> : <td><SemanticText text={cell} /></td>)}</tr>)}</tbody>
     </table>
   </div>
   {table.mode === 'cards' && <div class="table-card-list">
-    {table.rows.map(row => <div class="table-row-card"><dl>{table.columns.map((column, index) => <div><dt>{column.label}</dt><dd>{row.cells[index]}</dd></div>)}</dl></div>)}
+    {table.rows.map(row => <div class="table-row-card" data-intent={row.intent}>{row.intent && <p class="table-intent-label">{outputLabels[row.intent]}</p>}<dl>{table.columns.map((column, index) => <div><dt>{column.label}</dt><dd><SemanticText text={row.cells[index]} /></dd></div>)}</dl></div>)}
   </div>}
 </figure>
