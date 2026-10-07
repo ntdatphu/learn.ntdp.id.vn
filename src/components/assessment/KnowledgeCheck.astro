@@ -8,7 +8,7 @@ interface Props { mode: Mode; chapter: Chapter; bank: QuestionBank; catalog: Cat
 const { mode, chapter, bank, catalog } = Astro.props;
 validateQuestionBank(bank, chapter, catalog);
 const prefix = `check-${mode}-${chapter.id}`;
-const scope = (blocks: readonly ReadingBlock[], questionId: string) => blocks.map(block => 'id' in block ? { ...block, id: `${prefix}-${questionId}-${block.id}` } : block);
+// Authored IDs cannot contain underscores, so these delimiters make question/block namespaces unambiguous.\nconst scope = (blocks: readonly ReadingBlock[], questionId: string) => blocks.map(block => 'id' in block ? { ...block, id: `${prefix}__question__${questionId}__block__${block.id}` } : block);
 const payload = { chapterId: chapter.id, objectives: chapter.objectives, bank: { ...bank, questions: bank.questions.map(({ context, explanation, distractorExplanations, reviewAnchor, ...q }) => ({ ...q, explanation: '' })) } };
 ---
 <section class="knowledge-check reading-measure" data-knowledge-check data-mode={mode} data-assessment-chapter={chapter.id} aria-labelledby={prefix}>
