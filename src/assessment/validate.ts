@@ -37,9 +37,11 @@ export function validateQuestionBank(bank: QuestionBank, chapter: Chapter, catal
     });
   }
   for (const mode of ['before', 'after'] as const) {
-    const eligible = new Set(bank.questions.filter(q => q.eligibility.includes(mode)).map(q => q.objectiveId));
+    const eligibleQuestions = bank.questions.filter(q => q.eligibility.includes(mode));
+    const eligible = new Set(eligibleQuestions.map(q => q.objectiveId));
     expect([...objectives].every(id => eligible.has(id)), `Every Chapter objective needs ${mode} coverage`);
     const count = mode === 'before' ? bank.beforeCount : bank.afterCount;
     expect(Number.isInteger(count) && count >= objectives.size, 'Assessment count must cover the Chapter objectives');
+    expect(count <= eligibleQuestions.length, `Assessment count exceeds the unique ${mode} question supply`);
   }
 }

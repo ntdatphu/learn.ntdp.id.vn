@@ -45,6 +45,7 @@ export function validateCatalog(catalog: Catalog) {
   for (const command of catalog.commands) text(command.text, 'command text');
   for (const topic of catalog.keyTopics) { text(topic.title, 'Key Topic title'); text(topic.summary, 'Key Topic review summary'); validateReadingBlock({ kind: 'prose', paragraphs: topic.paragraphs, items: topic.items }, catalog); }
   for (const checklist of catalog.checklists) {
+    expect(checklist.id !== 'main-content', 'Checklist ID conflicts with reserved layout anchor');
     text(checklist.title, 'checklist title'); text(checklist.category, 'checklist category'); unique(checklist.steps, 'checklist step'); expect(checklist.steps.length > 0, 'Checklist needs steps');
     if (checklist.order !== undefined) expect(Number.isFinite(checklist.order), 'Invalid checklist order');
     for (const step of checklist.steps) { text(step.instruction, 'checklist instruction'); step.commandIds?.forEach(command => requireRecord(catalog.commands, command)); }
